@@ -1,5 +1,29 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ExtensionModel>
 	<Runtime>
+		<Import file="ConfigurationFiles/template.json" />
 	</Runtime>
+
+	<Extension path="/MonoDevelop/Ide/Commands">
+		<Category _name="Template Creator" id="TemplateCreator">
+			<Command
+				id="MonoDevelop.Templating.Commands.CreateTemplate"
+				_description="Creates a template"
+				_label="Create Template..."
+				defaultHandler="MonoDevelop.Templating.CreateTemplateHandler" />
+		</Category>
+	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/ContextMenu/ProjectPad">
+		<Condition id="ItemType" value="DotNetProject">
+			<SeparatorItem
+				id="CreateTemplateSeparator"
+				insertafter="MonoDevelop.Ide.Commands.ProjectCommands.Unload"
+				insertbefore="MonoDevelop.Ide.Commands.ProjectCommands.CustomCommandList" />
+			<CommandItem
+				id="MonoDevelop.Templating.Commands.CreateTemplate"
+				insertafter="CreateTemplateSeparator"
+				insertbefore="MonoDevelop.Ide.Commands.ProjectCommands.CustomCommandList" />
+		</Condition>
+	</Extension>
 </ExtensionModel>
