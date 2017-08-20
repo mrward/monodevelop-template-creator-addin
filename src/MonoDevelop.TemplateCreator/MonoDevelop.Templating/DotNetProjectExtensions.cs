@@ -48,5 +48,10 @@ namespace MonoDevelop.Templating
 			var fileName = project.GetTemplateJsonFilePath ();
 			return File.Exists (fileName);
 		}
+
+		public static string GetTemplateLanguageName (this DotNetProject project)
+		{
+			return project.LanguageName.Replace ("#", "Sharp");
+		}
 	}
 }

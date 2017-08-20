@@ -32,6 +32,11 @@
     <Compile Include="MonoDevelop.Templating\CreateTemplateHandler.cs" />
     <Compile Include="MonoDevelop.Templating\TemplateJsonFileCreator.cs" />
     <Compile Include="MonoDevelop.Templating\DotNetProjectExtensions.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateInformationDialog.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateInformationDialog.UI..cs">
+      <DependentUpon>TemplateInformationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MonoDevelop.Templating\TemplateInformationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />

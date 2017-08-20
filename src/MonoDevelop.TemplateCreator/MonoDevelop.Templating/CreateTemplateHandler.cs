@@ -60,16 +60,22 @@ namespace MonoDevelop.Templating
 				return;
 
 			try {
-				CreateTemplateJsonFile (project);
+				var viewModel = new TemplateInformationViewModel (project);
+				using (var dialog = new TemplateInformationDialog (viewModel)) {
+					if (dialog.ShowWithParent ()) {
+						CreateTemplateJsonFile (project, viewModel);
+					}
+				}
 			} catch (Exception ex) {
 				LoggingService.LogError ("Error creating template.json", ex);
+				MessageService.ShowError ("Unable to create template.json file.", ex.Message);
 			}
 		}
 
-		void CreateTemplateJsonFile (DotNetProject project)
+		void CreateTemplateJsonFile (DotNetProject project, TemplateInformationViewModel viewModel)
 		{
 			var templateJsonFileCreator = new TemplateJsonFileCreator ();
-			templateJsonFileCreator.CreateInDirectory (project.BaseDirectory);
+			templateJsonFileCreator.CreateInDirectory (project.BaseDirectory, viewModel);
 
 			IdeApp.Workbench.OpenDocument (
 				templateJsonFileCreator.TemplateJsonFilePath,

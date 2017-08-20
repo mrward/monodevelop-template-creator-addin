@@ -25,26 +25,31 @@
 // THE SOFTWARE.
 
 using System.IO;
+using System.Text;
 using MonoDevelop.Core;
+using MonoDevelop.Core.StringParsing;
 
 namespace MonoDevelop.Templating
 {
 	class TemplateJsonFileCreator
 	{
-		public void CreateInDirectory (FilePath rootDirectory)
+		public void CreateInDirectory (FilePath rootDirectory, IStringTagModel tagModel)
 		{
 			FilePath templateConfigDirectory = rootDirectory.Combine (".template.config");
 			Directory.CreateDirectory (templateConfigDirectory);
 
-			CopyTemplateJsonFile (templateConfigDirectory);
+			CopyTemplateJsonFile (templateConfigDirectory, tagModel);
 		}
 
-		void CopyTemplateJsonFile (FilePath templateConfigDirectory)
+		void CopyTemplateJsonFile (FilePath templateConfigDirectory, IStringTagModel tagModel)
 		{
 			FilePath sourceFilePath = GetDefaultTemplateJsonFilePath ();
 			FilePath destinationFilePath = templateConfigDirectory.Combine (sourceFilePath.FileName);
 
-			File.Copy (sourceFilePath, destinationFilePath);
+			string text = File.ReadAllText (sourceFilePath);
+			text = StringParserService.Parse (text, tagModel);
+
+			File.WriteAllText (destinationFilePath, text, Encoding.UTF8);
 
 			TemplateJsonFilePath = destinationFilePath;
 		}
