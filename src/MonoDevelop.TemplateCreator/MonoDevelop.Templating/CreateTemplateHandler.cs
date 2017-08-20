@@ -77,6 +77,8 @@ namespace MonoDevelop.Templating
 			var templateJsonFileCreator = new TemplateJsonFileCreator ();
 			templateJsonFileCreator.CreateInDirectory (project.BaseDirectory, viewModel);
 
+			FileFormatter.FormatFile (project.Policies, templateJsonFileCreator.TemplateJsonFilePath);
+
 			IdeApp.Workbench.OpenDocument (
 				templateJsonFileCreator.TemplateJsonFilePath,
 				project,
