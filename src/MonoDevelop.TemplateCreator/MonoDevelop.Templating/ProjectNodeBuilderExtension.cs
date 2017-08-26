@@ -1,5 +1,5 @@
 ﻿//
-// DotNetProjectExtensions.cs
+// ProjectNodeBuilderExtension.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,40 +24,58 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.IO;
-using MonoDevelop.Core;
+using System;
+using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating
 {
-	static class DotNetProjectExtensions
+	class ProjectNodeBuilderExtension : NodeBuilderExtension
 	{
-		public static FilePath GetTemplateJsonFilePath (this DotNetProject project)
+		public override bool CanBuildNode (Type dataType)
 		{
-			FilePath templateConfigDirectory = project.GetTemplateConfigDirectory ();
-			return templateConfigDirectory.Combine ("template.json");
+			return typeof (DotNetProject).IsAssignableFrom (dataType);
 		}
 
-		public static FilePath GetTemplateConfigDirectory (this DotNetProject project)
+		public override int GetSortIndex (ITreeNavigator node)
 		{
-			return project.BaseDirectory.Combine (".template.config");
+			// Same sort index as the default ProjectFolderNodeBuilder.
+			return -100;
 		}
 
-		public static bool HasTemplateJsonFile (this DotNetProject project)
+		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			FilePath fileName = project.GetTemplateJsonFilePath ();
-			return File.Exists (fileName);
+			if (ShowingAllFiles (builder))
+				return false;
+
+			return HasTemplateConfigDirectory (dataObject);
 		}
 
-		public static bool HasTemplateConfigDirectory (this DotNetProject project)
+		bool ShowingAllFiles (ITreeBuilder builder)
 		{
-			FilePath templateConfigDirectory = project.GetTemplateConfigDirectory ();
-			return Directory.Exists (templateConfigDirectory);
+			return builder.Options ["ShowAllFiles"];
 		}
 
-		public static string GetTemplateLanguageName (this DotNetProject project)
+		bool HasTemplateConfigDirectory (object dataObject)
 		{
-			return project.LanguageName.Replace ("#", "Sharp");
+			var project = dataObject as DotNetProject;
+			if (project == null)
+				return false;
+
+			return project.HasTemplateConfigDirectory ();
+		}
+
+		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
+		{
+			if (ShowingAllFiles (treeBuilder))
+				return;
+
+			if (!HasTemplateConfigDirectory (dataObject))
+				return;
+
+			var project = (DotNetProject)dataObject;
+			var folder = new TemplateConfigFolder (project);
+			treeBuilder.AddChild (folder);
 		}
 	}
 }

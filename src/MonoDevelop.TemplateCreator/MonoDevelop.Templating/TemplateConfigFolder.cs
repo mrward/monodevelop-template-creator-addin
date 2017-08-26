@@ -1,5 +1,5 @@
 ﻿//
-// DotNetProjectExtensions.cs
+// TemplateConfigFolder.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -25,39 +25,34 @@
 // THE SOFTWARE.
 
 using System.IO;
+using System.Linq;
 using MonoDevelop.Core;
+using MonoDevelop.Ide.Gui.Pads.ProjectPad;
 using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating
 {
-	static class DotNetProjectExtensions
+	class TemplateConfigFolder : ProjectFolder
 	{
-		public static FilePath GetTemplateJsonFilePath (this DotNetProject project)
+		public TemplateConfigFolder (DotNetProject project)
+			: this (project.GetTemplateConfigDirectory (), project)
 		{
-			FilePath templateConfigDirectory = project.GetTemplateConfigDirectory ();
-			return templateConfigDirectory.Combine ("template.json");
 		}
 
-		public static FilePath GetTemplateConfigDirectory (this DotNetProject project)
+		public TemplateConfigFolder (FilePath directory, DotNetProject project)
+			: base (directory, project)
 		{
-			return project.BaseDirectory.Combine (".template.config");
+			BaseDirectory = directory;
+			DotNetProject = project;
 		}
 
-		public static bool HasTemplateJsonFile (this DotNetProject project)
-		{
-			FilePath fileName = project.GetTemplateJsonFilePath ();
-			return File.Exists (fileName);
-		}
+		public FilePath BaseDirectory { get; private set; }
+		public DotNetProject DotNetProject { get; private set; }
 
-		public static bool HasTemplateConfigDirectory (this DotNetProject project)
+		public bool HasFiles ()
 		{
-			FilePath templateConfigDirectory = project.GetTemplateConfigDirectory ();
-			return Directory.Exists (templateConfigDirectory);
-		}
-
-		public static string GetTemplateLanguageName (this DotNetProject project)
-		{
-			return project.LanguageName.Replace ("#", "Sharp");
+			return Directory.Exists (BaseDirectory) &&
+				Directory.EnumerateFileSystemEntries (BaseDirectory).Any ();
 		}
 	}
 }

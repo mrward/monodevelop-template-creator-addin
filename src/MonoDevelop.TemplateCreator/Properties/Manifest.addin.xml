@@ -26,4 +26,9 @@
 				insertbefore="MonoDevelop.Ide.Commands.ProjectCommands.CustomCommandList" />
 		</Condition>
 	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/Pads/ProjectPad">
+		<NodeBuilder class="MonoDevelop.Templating.ProjectNodeBuilderExtension" />
+		<NodeBuilder class="MonoDevelop.Templating.TemplateConfigFolderNodeBuilderExtension" />
+	</Extension>
 </ExtensionModel>
