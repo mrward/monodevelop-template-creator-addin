@@ -85,6 +85,9 @@ namespace MonoDevelop.Templating
 				return;
 
 			var project = (DotNetProject)dataObject;
+			if (project.TemplateConfigDirectoryExistsInProject ())
+				return;
+
 			var folder = new TemplateConfigFolder (project);
 			treeBuilder.AddChild (folder);
 		}

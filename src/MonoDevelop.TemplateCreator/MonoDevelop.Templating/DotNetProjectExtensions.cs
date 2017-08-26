@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.IO;
 using MonoDevelop.Core;
 using MonoDevelop.Projects;
@@ -58,6 +59,34 @@ namespace MonoDevelop.Templating
 		public static string GetTemplateLanguageName (this DotNetProject project)
 		{
 			return project.LanguageName.Replace ("#", "Sharp");
+		}
+
+		public static bool TemplateConfigDirectoryExistsInProject (this DotNetProject project)
+		{
+			FilePath directory = project.GetTemplateConfigDirectory ();
+
+			foreach (ProjectFile file in project.Files) {
+				if (ExistsInDirectory (directory, file)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		static bool ExistsInDirectory (string basePath, ProjectFile file)
+		{
+			StringComparison comparison = GetStringComparison ();
+			return file.Name.StartsWith (basePath, comparison) &&
+				(file.Name.Length == basePath.Length || file.Name [basePath.Length] == Path.DirectorySeparatorChar);
+		}
+
+		static StringComparison GetStringComparison ()
+		{
+			if (Platform.IsWindows || Platform.IsMac)
+				return StringComparison.OrdinalIgnoreCase;
+
+			return StringComparison.Ordinal;
 		}
 	}
 }
