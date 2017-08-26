@@ -41,6 +41,8 @@
     <Compile Include="MonoDevelop.Templating\ProjectNodeBuilderExtension.cs" />
     <Compile Include="MonoDevelop.Templating\TemplateConfigFolderNodeBuilderExtension.cs" />
     <Compile Include="MonoDevelop.Templating\TemplateConfigFolder.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplatingServices.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplatingEventsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />

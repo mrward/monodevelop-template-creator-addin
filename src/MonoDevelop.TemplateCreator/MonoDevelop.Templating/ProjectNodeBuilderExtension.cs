@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using MonoDevelop.Core;
 using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Projects;
 
@@ -32,6 +33,16 @@ namespace MonoDevelop.Templating
 {
 	class ProjectNodeBuilderExtension : NodeBuilderExtension
 	{
+		public ProjectNodeBuilderExtension ()
+		{
+			TemplatingServices.EventsService.TemplateFileCreated += TemplateFileCreated;
+		}
+
+		public override void Dispose ()
+		{
+			TemplatingServices.EventsService.TemplateFileCreated -= TemplateFileCreated;
+		}
+
 		public override bool CanBuildNode (Type dataType)
 		{
 			return typeof (DotNetProject).IsAssignableFrom (dataType);
@@ -76,6 +87,21 @@ namespace MonoDevelop.Templating
 			var project = (DotNetProject)dataObject;
 			var folder = new TemplateConfigFolder (project);
 			treeBuilder.AddChild (folder);
+		}
+
+		void TemplateFileCreated (object sender, ProjectEventArgs e)
+		{
+			RefreshProjectNode (e.Project);
+		}
+
+		void RefreshProjectNode (Project project)
+		{
+			Runtime.RunInMainThread (() => {
+				ITreeBuilder builder = Context.GetTreeBuilder (project);
+				if (builder != null) {
+					builder.UpdateAll ();
+				}
+			});
 		}
 	}
 }

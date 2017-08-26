@@ -79,6 +79,8 @@ namespace MonoDevelop.Templating
 
 			FileFormatter.FormatFile (project.Policies, templateJsonFileCreator.TemplateJsonFilePath);
 
+			TemplatingServices.EventsService.OnTemplateFileCreated (project);
+
 			IdeApp.Workbench.OpenDocument (
 				templateJsonFileCreator.TemplateJsonFilePath,
 				project,
