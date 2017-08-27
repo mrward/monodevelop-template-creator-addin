@@ -24,9 +24,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using MonoDevelop.Projects;
-using MonoDevelop.Core.StringParsing;
 using System;
+using System.Reflection;
+using MonoDevelop.Core.StringParsing;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating
 {
@@ -65,29 +66,12 @@ namespace MonoDevelop.Templating
 
 		public object GetValue (string name)
 		{
-			if (IsMatch (nameof (Author), name)) {
-				return Author;
-			} else if (IsMatch (nameof (DisplayName), name)) {
-				return DisplayName;
-			} else if (IsMatch (nameof (ShortName), name)) {
-				return ShortName;
-			} else if (IsMatch (nameof (DefaultProjectName), name)) {
-				return DefaultProjectName;
-			} else if (IsMatch (nameof (Identity), name)) {
-				return Identity;
-			} else if (IsMatch (nameof (GroupIdentity), name)) {
-				return GroupIdentity;
-			} else if (IsMatch (nameof (SourceName), name)) {
-				return SourceName;
-			} else if (IsMatch (nameof (Language), name)) {
-				return Language;
+			var bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase;
+			PropertyInfo property = GetType ().GetProperty (name, bindingFlags);
+			if (property != null) {
+				return property.GetValue (this) as string;
 			}
 			return null;
-		}
-
-		static bool IsMatch (string x, string y)
-		{
-			return StringComparer.OrdinalIgnoreCase.Equals (x, y);
 		}
 	}
 }
