@@ -47,6 +47,7 @@ namespace MonoDevelop.Templating
 		public string Identity { get; set; }
 		public string GroupIdentity { get; set; }
 		public string SourceName { get; set; }
+		public string Language { get; set; }
 
 		void GenerateDefaults ()
 		{
@@ -54,6 +55,7 @@ namespace MonoDevelop.Templating
 			DefaultProjectName = project.Name;
 			DisplayName = project.Name;
 			ShortName = project.Name;
+			Language = project.LanguageName;
 
 			GroupIdentity = $"MyTemplate.{project.Name}";
 			Identity = $"{GroupIdentity}.{project.GetTemplateLanguageName ()}";
@@ -77,6 +79,8 @@ namespace MonoDevelop.Templating
 				return GroupIdentity;
 			} else if (IsMatch (nameof (SourceName), name)) {
 				return SourceName;
+			} else if (IsMatch (nameof (Language), name)) {
+				return Language;
 			}
 			return null;
 		}

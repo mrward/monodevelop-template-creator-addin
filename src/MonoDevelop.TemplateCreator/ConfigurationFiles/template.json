@@ -7,7 +7,10 @@
 	"defaultName": "${DefaultProjectName}",
 	"identity": "${Identity}",
 	"groupIdentity": "${Groupidentity}",
-	"tags": {},
+	"tags": {
+		"language": "${Language}",
+		"type": "project"
+	},
 	"shortName": "${ShortName}",
 	"sourceName": "${SourceName}",
 	"guids": [],
