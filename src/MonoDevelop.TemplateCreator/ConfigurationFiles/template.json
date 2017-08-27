@@ -13,7 +13,9 @@
 	},
 	"shortName": "${ShortName}",
 	"sourceName": "${SourceName}",
-	"guids": [],
+	"guids": [
+		${DoubleQuotedProjectGuid}
+	],
 	"primaryOutputs": [
 		{ "path": "${ProjectFilePrimaryOutput}" }
 	]

@@ -50,6 +50,7 @@ namespace MonoDevelop.Templating
 		public string SourceName { get; set; }
 		public string Language { get; set; }
 		public string ProjectFilePrimaryOutput { get; set; }
+		public string DoubleQuotedProjectGuid { get; set; }
 
 		void GenerateDefaults ()
 		{
@@ -64,6 +65,11 @@ namespace MonoDevelop.Templating
 
 			ProjectFilePrimaryOutput = project.FileName.FileName;
 			SourceName = project.FileName.FileNameWithoutExtension;
+
+			string guid = project.ItemId;
+			if (!string.IsNullOrEmpty (guid)) {
+				DoubleQuotedProjectGuid = "\"" + guid + "\"";
+			}
 		}
 
 		public object GetValue (string name)
