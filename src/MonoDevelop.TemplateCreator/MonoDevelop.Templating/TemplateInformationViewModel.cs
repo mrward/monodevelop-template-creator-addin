@@ -49,18 +49,20 @@ namespace MonoDevelop.Templating
 		public string GroupIdentity { get; set; }
 		public string SourceName { get; set; }
 		public string Language { get; set; }
+		public string ProjectFilePrimaryOutput { get; set; }
 
 		void GenerateDefaults ()
 		{
 			Author = AuthorInformation.Default.Name;
 			DefaultProjectName = project.Name;
 			DisplayName = project.Name;
-			ShortName = project.Name;
 			Language = project.LanguageName;
+			ShortName = project.Name;
 
 			GroupIdentity = $"MyTemplate.{project.Name}";
 			Identity = $"{GroupIdentity}.{project.GetTemplateLanguageName ()}";
 
+			ProjectFilePrimaryOutput = project.FileName.FileName;
 			SourceName = project.FileName.FileNameWithoutExtension;
 		}
 

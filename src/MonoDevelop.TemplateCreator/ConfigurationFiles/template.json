@@ -14,5 +14,7 @@
 	"shortName": "${ShortName}",
 	"sourceName": "${SourceName}",
 	"guids": [],
-	"primaryOutputs": []
+	"primaryOutputs": [
+		{ "path": "${ProjectFilePrimaryOutput}" }
+	]
 }
