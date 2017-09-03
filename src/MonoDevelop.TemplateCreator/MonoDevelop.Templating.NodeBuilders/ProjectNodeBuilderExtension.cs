@@ -1,4 +1,4 @@
-﻿//
+﻿﻿//
 // ProjectNodeBuilderExtension.cs
 //
 // Author:
@@ -29,7 +29,7 @@ using MonoDevelop.Core;
 using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Projects;
 
-namespace MonoDevelop.Templating
+namespace MonoDevelop.Templating.NodeBuilders
 {
 	class ProjectNodeBuilderExtension : NodeBuilderExtension
 	{

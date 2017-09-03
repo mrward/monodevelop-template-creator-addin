@@ -1,4 +1,4 @@
-﻿//
+﻿﻿//
 // TemplateInformationDialog.cs
 //
 // Author:
@@ -28,13 +28,13 @@ using System;
 using MonoDevelop.Ide;
 using Xwt;
 
-namespace MonoDevelop.Templating
+namespace MonoDevelop.Templating.Gui
 {
 	partial class TemplateInformationDialog
 	{
-		TemplateInformationViewModel viewModel;
+		TemplateInformation viewModel;
 
-		public TemplateInformationDialog (TemplateInformationViewModel viewModel)
+		public TemplateInformationDialog (TemplateInformation viewModel)
 		{
 			this.viewModel = viewModel;
 

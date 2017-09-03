@@ -1,5 +1,5 @@
 ﻿//
-// TemplateInformationViewModel.cs
+// TemplateInformation.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,18 +24,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
 using System.Reflection;
 using MonoDevelop.Core.StringParsing;
 using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating
 {
-	class TemplateInformationViewModel : IStringTagModel
+	class TemplateInformation : IStringTagModel
 	{
 		DotNetProject project;
 
-		public TemplateInformationViewModel (DotNetProject project)
+		public TemplateInformation (DotNetProject project)
 		{
 			this.project = project;
 			GenerateDefaults ();

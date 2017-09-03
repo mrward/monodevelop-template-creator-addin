@@ -10,7 +10,7 @@
 				id="MonoDevelop.Templating.Commands.CreateTemplate"
 				_description="Creates a template"
 				_label="Create Template..."
-				defaultHandler="MonoDevelop.Templating.CreateTemplateHandler" />
+				defaultHandler="MonoDevelop.Templating.Commands.CreateTemplateHandler" />
 		</Category>
 	</Extension>
 
@@ -28,8 +28,8 @@
 	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/Pads/ProjectPad">
-		<NodeBuilder class="MonoDevelop.Templating.ProjectNodeBuilderExtension" />
-		<NodeBuilder class="MonoDevelop.Templating.TemplateConfigFolderNodeBuilderExtension" />
+		<NodeBuilder class="MonoDevelop.Templating.NodeBuilders.ProjectNodeBuilderExtension" />
+		<NodeBuilder class="MonoDevelop.Templating.NodeBuilders.TemplateConfigFolderNodeBuilderExtension" />
 	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/GlobalOptionsDialog">
@@ -38,7 +38,7 @@
 				id="TemplateFolders"
 				_label="Template Folders"
 				fill="true"
-				class="MonoDevelop.Templating.TemplateFoldersOptionsPanel" />
+				class="MonoDevelop.Templating.Gui.TemplateFoldersOptionsPanel" />
 		</Section>
 	</Extension>
 </ExtensionModel>

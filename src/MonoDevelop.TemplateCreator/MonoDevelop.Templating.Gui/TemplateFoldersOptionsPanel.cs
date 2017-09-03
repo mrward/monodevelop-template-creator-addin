@@ -1,5 +1,5 @@
-﻿//
-// TemplateFoldersOptionsWidget.cs
+﻿﻿//
+// TemplateFoldersOptionsPanel.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,21 +24,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.Linq;
+using MonoDevelop.Components;
+using MonoDevelop.Ide.Gui.Dialogs;
 
-namespace MonoDevelop.Templating
+namespace MonoDevelop.Templating.Gui
 {
-	partial class TemplateFoldersOptionsWidget
+	class TemplateFoldersOptionsPanel : OptionsPanel
 	{
 		TemplateFoldersOptionsViewModel viewModel;
 
-		public TemplateFoldersOptionsWidget (TemplateFoldersOptionsViewModel viewModel)
+		public override void ApplyChanges ()
 		{
-			this.viewModel 	= viewModel;
+			viewModel.Save ();
+		}
 
-			Build ();
-
-			folderSelector.Directories = viewModel.TemplateFolders;
+		public override Control CreatePanelWidget ()
+		{
+			viewModel = new TemplateFoldersOptionsViewModel ();
+			return new TemplateFoldersOptionsWidget (viewModel);
 		}
 	}
 }

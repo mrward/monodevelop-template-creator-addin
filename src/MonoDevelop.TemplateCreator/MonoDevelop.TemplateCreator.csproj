@@ -29,27 +29,27 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AddinInfo.cs" />
-    <Compile Include="MonoDevelop.Templating\CreateTemplateHandler.cs" />
     <Compile Include="MonoDevelop.Templating\TemplateJsonFileCreator.cs" />
     <Compile Include="MonoDevelop.Templating\DotNetProjectExtensions.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateInformationDialog.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateInformationDialog.UI..cs">
-      <DependentUpon>TemplateInformationDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MonoDevelop.Templating\TemplateInformationViewModel.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateInformation.cs" />
     <Compile Include="MonoDevelop.Templating\FileFormatter.cs" />
-    <Compile Include="MonoDevelop.Templating\ProjectNodeBuilderExtension.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateConfigFolderNodeBuilderExtension.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateConfigFolder.cs" />
     <Compile Include="MonoDevelop.Templating\TemplatingServices.cs" />
     <Compile Include="MonoDevelop.Templating\TemplatingEventsService.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateFoldersOptionsPanel.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateFoldersOptionsViewModel.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateFoldersOptionsWidget.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateFoldersOptionsWidget.UI.cs">
+    <Compile Include="MonoDevelop.Templating\TemplatingOptions.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateFoldersOptionsWidget.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateFoldersOptionsWidget.UI.cs">
       <DependentUpon>TemplateFoldersOptionsWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="MonoDevelop.Templating\TemplatingOptions.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateInformationDialog.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateInformationDialog.UI..cs">
+      <DependentUpon>TemplateInformationDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateFoldersOptionsPanel.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateFoldersOptionsViewModel.cs" />
+    <Compile Include="MonoDevelop.Templating.NodeBuilders\ProjectNodeBuilderExtension.cs" />
+    <Compile Include="MonoDevelop.Templating.NodeBuilders\TemplateConfigFolder.cs" />
+    <Compile Include="MonoDevelop.Templating.Commands\CreateTemplateHandler.cs" />
+    <Compile Include="MonoDevelop.Templating.NodeBuilders\TemplateConfigFolderNodeBuilderExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />

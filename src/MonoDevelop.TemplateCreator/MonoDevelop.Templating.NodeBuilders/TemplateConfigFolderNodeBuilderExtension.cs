@@ -1,4 +1,4 @@
-﻿//
+﻿﻿//
 // TemplateConfigFolderNodeBuilderExtension.cs
 //
 // Author:
@@ -30,7 +30,7 @@ using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Ide.Gui.Pads.ProjectPad;
 using Xwt.Drawing;
 
-namespace MonoDevelop.Templating
+namespace MonoDevelop.Templating.NodeBuilders
 {
 	class TemplateConfigFolderNodeBuilderExtension : NodeBuilderExtension
 	{

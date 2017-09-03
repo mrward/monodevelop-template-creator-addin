@@ -1,4 +1,4 @@
-﻿//
+﻿﻿//
 // CreateTemplateHandler.cs
 //
 // Author:
@@ -29,8 +29,9 @@ using MonoDevelop.Components.Commands;
 using MonoDevelop.Core;
 using MonoDevelop.Ide;
 using MonoDevelop.Projects;
+using MonoDevelop.Templating.Gui;
 
-namespace MonoDevelop.Templating
+namespace MonoDevelop.Templating.Commands
 {
 	class CreateTemplateHandler : CommandHandler
 	{
@@ -60,7 +61,7 @@ namespace MonoDevelop.Templating
 				return;
 
 			try {
-				var viewModel = new TemplateInformationViewModel (project);
+				var viewModel = new TemplateInformation (project);
 				using (var dialog = new TemplateInformationDialog (viewModel)) {
 					if (dialog.ShowWithParent ()) {
 						CreateTemplateJsonFile (project, viewModel);
@@ -72,7 +73,7 @@ namespace MonoDevelop.Templating
 			}
 		}
 
-		void CreateTemplateJsonFile (DotNetProject project, TemplateInformationViewModel viewModel)
+		void CreateTemplateJsonFile (DotNetProject project, TemplateInformation viewModel)
 		{
 			var templateJsonFileCreator = new TemplateJsonFileCreator ();
 			templateJsonFileCreator.CreateInDirectory (project.BaseDirectory, viewModel);

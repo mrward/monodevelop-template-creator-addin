@@ -1,4 +1,4 @@
-﻿//
+﻿﻿//
 // TemplateFoldersOptionsViewModel.cs
 //
 // Author:
@@ -27,7 +27,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MonoDevelop.Templating
+namespace MonoDevelop.Templating.Gui
 {
 	class TemplateFoldersOptionsViewModel
 	{

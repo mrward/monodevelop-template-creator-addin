@@ -1,4 +1,4 @@
-﻿//
+﻿﻿//
 // TemplateFoldersOptionsWidget.UI.cs
 //
 // Author:
@@ -29,7 +29,7 @@ using Gtk;
 using MonoDevelop.Core;
 using MonoDevelop.Components;
 
-namespace MonoDevelop.Templating
+namespace MonoDevelop.Templating.Gui
 {
 	partial class TemplateFoldersOptionsWidget : Gtk.Bin
 	{
