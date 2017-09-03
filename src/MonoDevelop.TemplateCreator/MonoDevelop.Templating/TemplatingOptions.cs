@@ -1,5 +1,5 @@
 ﻿//
-// TemplatingServices.cs
+// TemplatingOptions.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,19 +24,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using MonoDevelop.Core;
+
 namespace MonoDevelop.Templating
 {
-	static class TemplatingServices
+	class TemplatingOptions
 	{
-		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
-		static readonly TemplatingOptions options = new TemplatingOptions ();
+		static readonly string TemplateFoldersPropertyName = "TemplateFolders";
 
-		public static TemplatingEventsService EventsService {
-			get { return eventsService; }
+		List<string> templateFolders = new List<string> ();
+
+		public TemplatingOptions ()
+		{
+			templateFolders = PropertyService.Get (TemplateFoldersPropertyName, new List<string> ());
 		}
 
-		public static TemplatingOptions Options {
-			get { return options; }
+		public IEnumerable<string> TemplateFolders {
+			get { return templateFolders; }
+		}
+
+		public void UpdateTemplateFolders (IEnumerable<string> folders)
+		{
+			templateFolders = folders.ToList ();
+			Save ();
+		}
+
+		void Save ()
+		{
+			PropertyService.Set (TemplateFoldersPropertyName, templateFolders);
+			PropertyService.SaveProperties ();
 		}
 	}
 }

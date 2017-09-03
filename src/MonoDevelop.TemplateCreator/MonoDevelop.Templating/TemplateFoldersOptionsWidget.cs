@@ -1,5 +1,5 @@
 ﻿//
-// TemplatingServices.cs
+// TemplateFoldersOptionsWidget.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,19 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Linq;
+
 namespace MonoDevelop.Templating
 {
-	static class TemplatingServices
+	partial class TemplateFoldersOptionsWidget
 	{
-		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
-		static readonly TemplatingOptions options = new TemplatingOptions ();
+		TemplateFoldersOptionsViewModel viewModel;
 
-		public static TemplatingEventsService EventsService {
-			get { return eventsService; }
-		}
+		public TemplateFoldersOptionsWidget (TemplateFoldersOptionsViewModel viewModel)
+		{
+			this.viewModel 	= viewModel;
 
-		public static TemplatingOptions Options {
-			get { return options; }
+			Build ();
+
+			folderSelector.Directories = viewModel.TemplateFolders;
 		}
 	}
 }

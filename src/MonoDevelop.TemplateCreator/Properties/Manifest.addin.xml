@@ -31,4 +31,14 @@
 		<NodeBuilder class="MonoDevelop.Templating.ProjectNodeBuilderExtension" />
 		<NodeBuilder class="MonoDevelop.Templating.TemplateConfigFolderNodeBuilderExtension" />
 	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/GlobalOptionsDialog">
+		<Section id="Templating" _label="Templates" insertafter="VersionControl" insertbefore="Other">
+			<Section
+				id="TemplateFolders"
+				_label="Template Folders"
+				fill="true"
+				class="MonoDevelop.Templating.TemplateFoldersOptionsPanel" />
+		</Section>
+	</Extension>
 </ExtensionModel>

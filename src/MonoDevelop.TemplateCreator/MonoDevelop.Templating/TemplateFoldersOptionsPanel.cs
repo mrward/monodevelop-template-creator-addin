@@ -1,5 +1,5 @@
 ﻿//
-// TemplatingServices.cs
+// TemplateFoldersOptionsPanel.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,19 +24,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using MonoDevelop.Components;
+using MonoDevelop.Ide.Gui.Dialogs;
+
 namespace MonoDevelop.Templating
 {
-	static class TemplatingServices
+	class TemplateFoldersOptionsPanel : OptionsPanel
 	{
-		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
-		static readonly TemplatingOptions options = new TemplatingOptions ();
+		TemplateFoldersOptionsViewModel viewModel;
 
-		public static TemplatingEventsService EventsService {
-			get { return eventsService; }
+		public override void ApplyChanges ()
+		{
+			viewModel.Save ();
 		}
 
-		public static TemplatingOptions Options {
-			get { return options; }
+		public override Control CreatePanelWidget ()
+		{
+			viewModel = new TemplateFoldersOptionsViewModel ();
+			return new TemplateFoldersOptionsWidget (viewModel);
 		}
 	}
 }

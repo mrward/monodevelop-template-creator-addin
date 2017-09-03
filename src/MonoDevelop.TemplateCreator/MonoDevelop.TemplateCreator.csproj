@@ -43,6 +43,13 @@
     <Compile Include="MonoDevelop.Templating\TemplateConfigFolder.cs" />
     <Compile Include="MonoDevelop.Templating\TemplatingServices.cs" />
     <Compile Include="MonoDevelop.Templating\TemplatingEventsService.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateFoldersOptionsPanel.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateFoldersOptionsViewModel.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateFoldersOptionsWidget.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateFoldersOptionsWidget.UI.cs">
+      <DependentUpon>TemplateFoldersOptionsWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MonoDevelop.Templating\TemplatingOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />
