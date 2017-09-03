@@ -1,5 +1,9 @@
-﻿//
-// TemplatingServices.cs
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using MonoDevelop.Ide.Projects;
+//
+// CustomProjectTemplatingProvider.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,24 +28,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using MonoDevelop.Ide.Templates;
+using MonoDevelop.Projects;
+
 namespace MonoDevelop.Templating
 {
-	static class TemplatingServices
+	class CustomProjectTemplatingProvider : IProjectTemplatingProvider
 	{
-		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
-		static readonly TemplatingOptions options = new TemplatingOptions ();
-		static readonly TemplatingEngine templatingEngine = new TemplatingEngine ();
-
-		public static TemplatingEventsService EventsService {
-			get { return eventsService; }
+		public bool CanProcessTemplate (SolutionTemplate template)
+		{
+			return template is CustomSolutionTemplate;
 		}
 
-		public static TemplatingOptions Options {
-			get { return options; }
+		public IEnumerable<SolutionTemplate> GetTemplates ()
+		{
+			var templateEngine = TemplatingServices.TemplatingEngine;
+			templateEngine.LoadTemplates ();
+
+			return templateEngine.Templates;
 		}
 
-		public static TemplatingEngine TemplatingEngine {
-			get { return templatingEngine; }
+		public Task<ProcessedTemplateResult> ProcessTemplate (
+			SolutionTemplate template,
+			NewProjectConfiguration config,
+			SolutionFolder parentFolder)
+		{
+			var templateProcessor = new TemplateProcessor (
+				(CustomSolutionTemplate)template,
+				config,
+				parentFolder);
+
+			return templateProcessor.ProcessTemplate ();
 		}
 	}
 }

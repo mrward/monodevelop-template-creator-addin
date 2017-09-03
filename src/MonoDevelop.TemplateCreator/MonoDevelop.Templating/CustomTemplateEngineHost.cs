@@ -1,5 +1,5 @@
 ﻿//
-// TemplatingServices.cs
+// CustomTemplateEngineHost.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,24 +24,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Collections.Generic;
+using System.Globalization;
+using Microsoft.TemplateEngine.Edge;
+using Microsoft.TemplateEngine.Orchestrator.RunnableProjects;
+using Microsoft.TemplateEngine.Orchestrator.RunnableProjects.Config;
+using Microsoft.TemplateEngine.Utils;
+
 namespace MonoDevelop.Templating
 {
-	static class TemplatingServices
+	class CustomTemplateEngineHost : DefaultTemplateEngineHost
 	{
-		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
-		static readonly TemplatingOptions options = new TemplatingOptions ();
-		static readonly TemplatingEngine templatingEngine = new TemplatingEngine ();
+		static readonly string hostIdentifier = "MonoDevelopTemplateCreator";
+		static readonly string hostVersion = "0.1";
 
-		public static TemplatingEventsService EventsService {
-			get { return eventsService; }
-		}
+		static readonly Dictionary<string, string> preferences = new Dictionary<string, string> {
+			{ "prefs:language", "C#" }
+		};
 
-		public static TemplatingOptions Options {
-			get { return options; }
-		}
+		static readonly AssemblyComponentCatalog builtIns = new AssemblyComponentCatalog (new [] {
+			typeof (RunnableProjectGenerator).Assembly,
+			typeof (ConditionalConfig).Assembly
+		});
 
-		public static TemplatingEngine TemplatingEngine {
-			get { return templatingEngine; }
+		public CustomTemplateEngineHost ()
+			: base (hostIdentifier, hostVersion, CultureInfo.CurrentCulture.Name, preferences, builtIns)
+		{
 		}
 	}
 }

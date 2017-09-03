@@ -1,5 +1,8 @@
-﻿//
-// TemplatingServices.cs
+﻿using System;
+using Microsoft.TemplateEngine.Abstractions;
+using Microsoft.TemplateEngine.Edge.Settings;
+//
+// CustomSolutionTemplate.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,24 +27,26 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using MonoDevelop.Ide.Templates;
+
 namespace MonoDevelop.Templating
 {
-	static class TemplatingServices
+	class CustomSolutionTemplate : SolutionTemplate
 	{
-		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
-		static readonly TemplatingOptions options = new TemplatingOptions ();
-		static readonly TemplatingEngine templatingEngine = new TemplatingEngine ();
+		TemplateInfo info;
 
-		public static TemplatingEventsService EventsService {
-			get { return eventsService; }
+		public CustomSolutionTemplate (TemplateInfo info)
+			: base (info.Identity, info.Name, null)
+		{
+			this.info = info;
+
+			Category = "other/net/general";
+			Description = info.Description;
+			Language = info.GetLanguage ();
 		}
 
-		public static TemplatingOptions Options {
-			get { return options; }
-		}
-
-		public static TemplatingEngine TemplatingEngine {
-			get { return templatingEngine; }
+		public TemplateInfo Info {
+			get { return info; }
 		}
 	}
 }

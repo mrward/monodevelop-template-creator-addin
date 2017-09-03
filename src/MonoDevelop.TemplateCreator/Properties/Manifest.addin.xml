@@ -41,4 +41,10 @@
 				class="MonoDevelop.Templating.Gui.TemplateFoldersOptionsPanel" />
 		</Section>
 	</Extension>
+	
+	<Extension path="/MonoDevelop/Ide/ProjectTemplatingProviders">
+		<Class
+			id="MonoDevelop.CustomProjectTemplateProvider"
+			class="MonoDevelop.Templating.CustomProjectTemplatingProvider" />
+	</Extension>
 </ExtensionModel>

@@ -1,5 +1,5 @@
 ﻿//
-// TemplatingServices.cs
+// TemplateInfoExtensions.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,24 +24,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using Microsoft.TemplateEngine.Abstractions;
+using Microsoft.TemplateEngine.Edge.Settings;
+
 namespace MonoDevelop.Templating
 {
-	static class TemplatingServices
+	public static class TemplateInfoExtensions
 	{
-		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
-		static readonly TemplatingOptions options = new TemplatingOptions ();
-		static readonly TemplatingEngine templatingEngine = new TemplatingEngine ();
+		public static string GetLanguage (this TemplateInfo templateInfo)
+		{
+			ICacheTag languageTag;
+			if (templateInfo.Tags.TryGetValue ("language", out languageTag)) {
+				return languageTag.DefaultValue;
+			}
 
-		public static TemplatingEventsService EventsService {
-			get { return eventsService; }
-		}
-
-		public static TemplatingOptions Options {
-			get { return options; }
-		}
-
-		public static TemplatingEngine TemplatingEngine {
-			get { return templatingEngine; }
+			return string.Empty;
 		}
 	}
 }

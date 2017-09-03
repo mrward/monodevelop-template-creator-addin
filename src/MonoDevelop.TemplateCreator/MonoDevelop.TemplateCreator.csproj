@@ -50,6 +50,13 @@
     <Compile Include="MonoDevelop.Templating.NodeBuilders\TemplateConfigFolder.cs" />
     <Compile Include="MonoDevelop.Templating.Commands\CreateTemplateHandler.cs" />
     <Compile Include="MonoDevelop.Templating.NodeBuilders\TemplateConfigFolderNodeBuilderExtension.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplatingEngine.cs" />
+    <Compile Include="MonoDevelop.Templating\CustomTemplateEngineHost.cs" />
+    <Compile Include="MonoDevelop.Templating\CustomProjectTemplatingProvider.cs" />
+    <Compile Include="MonoDevelop.Templating\CustomSolutionTemplate.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateInfoExtensions.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateProcessor.cs" />
+    <Compile Include="MonoDevelop.Templating\ProcessedCustomTemplateResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />
@@ -66,10 +73,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <DotNetNamingPolicy ResourceNamePolicy="FileFormatDefault" DirectoryNamespaceAssociation="Flat">
-            <inheritsSet />
-            <inheritsScope />
-          </DotNetNamingPolicy>
+          <DotNetNamingPolicy ResourceNamePolicy="FileFormatDefault" DirectoryNamespaceAssociation="Flat" />
         </Policies>
       </Properties>
     </MonoDevelop>
