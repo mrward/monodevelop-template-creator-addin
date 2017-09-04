@@ -47,7 +47,7 @@ namespace MonoDevelop.Templating.Gui
 			var topLabel = new Label ();
 			topLabel.Xalign = 0;
 			topLabel.Text = GettextCatalog.GetString (
-				"Custom folders where {0} will look for project templates defined with '.template.config/template.json' file.",
+				"Custom folders where {0} will look for project templates defined with a '.template.config/template.json' file.",
 				BrandingService.ApplicationName);
 			mainVBox.PackStart (topLabel, false, false, 0);
 
