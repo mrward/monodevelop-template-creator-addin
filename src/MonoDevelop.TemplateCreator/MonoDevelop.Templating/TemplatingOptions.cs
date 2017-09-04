@@ -48,8 +48,18 @@ namespace MonoDevelop.Templating
 
 		public void UpdateTemplateFolders (IEnumerable<string> folders)
 		{
+			if (!FoldersHaveChanged (folders))
+				return;
+
 			templateFolders = folders.ToList ();
 			Save ();
+
+			TemplatingServices.EventsService.OnTemplateFoldersChanged ();
+		}
+
+		bool FoldersHaveChanged (IEnumerable<string> folders)
+		{
+			return !folders.SequenceEqual (templateFolders);
 		}
 
 		void Save ()

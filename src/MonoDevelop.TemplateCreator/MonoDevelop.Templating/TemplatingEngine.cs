@@ -24,14 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.TemplateEngine.Edge;
 using Microsoft.TemplateEngine.Edge.Settings;
 using Microsoft.TemplateEngine.Edge.Template;
 using Microsoft.TemplateEngine.Utils;
-using System.Threading.Tasks;
 using MonoDevelop.Ide.Projects;
 
 namespace MonoDevelop.Templating
@@ -52,14 +53,25 @@ namespace MonoDevelop.Templating
 			paths = new Paths (settings);
 			templateCreator = new TemplateCreator (settings);
 
-			ResetCache ();
+			DeleteCache ();
 		}
 
-		void ResetCache ()
+		void DeleteCache ()
 		{
 			if (Directory.Exists (paths.User.BaseDir)) {
 				paths.DeleteDirectory (paths.User.BaseDir);
 			}
+		}
+
+		public void ReloadTemplates ()
+		{
+			if (settings == null)
+				return;
+
+			Initialize ();
+
+			templates.Clear ();
+			loaded = false;
 		}
 
 		void EnsureInitialized ()

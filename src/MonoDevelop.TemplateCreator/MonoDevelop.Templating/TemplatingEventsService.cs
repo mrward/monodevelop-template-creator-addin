@@ -37,5 +37,12 @@ namespace MonoDevelop.Templating
 		{
 			TemplateFileCreated?.Invoke (this, new ProjectEventArgs (project));
 		}
+
+		public event EventHandler TemplateFoldersChanged;
+
+		public void OnTemplateFoldersChanged ()
+		{
+			TemplateFoldersChanged?.Invoke (this, new EventArgs ());
+		}
 	}
 }

@@ -24,6 +24,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using MonoDevelop.Core;
+
 namespace MonoDevelop.Templating
 {
 	static class TemplatingServices
@@ -31,6 +34,25 @@ namespace MonoDevelop.Templating
 		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
 		static readonly TemplatingOptions options = new TemplatingOptions ();
 		static readonly TemplatingEngine templatingEngine = new TemplatingEngine ();
+
+		static TemplatingServices ()
+		{
+			Initialize ();
+		}
+
+		static void Initialize ()
+		{
+			eventsService.TemplateFoldersChanged += TemplateFoldersChanged;
+		}
+
+		static void TemplateFoldersChanged (object sender, EventArgs e)
+		{
+			try {
+				templatingEngine.ReloadTemplates ();
+			} catch (Exception ex) {
+				LoggingService.LogError ("Unable to reset cache.", ex);
+			}
+		}
 
 		public static TemplatingEventsService EventsService {
 			get { return eventsService; }
