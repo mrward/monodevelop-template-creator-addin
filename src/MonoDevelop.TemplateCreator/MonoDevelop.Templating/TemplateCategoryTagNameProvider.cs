@@ -1,5 +1,5 @@
 ﻿//
-// CustomSolutionTemplate.cs
+// TemplateCategoryTagNameProvider.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,42 +24,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Microsoft.TemplateEngine.Abstractions;
-using Microsoft.TemplateEngine.Edge.Settings;
-using MonoDevelop.Ide.Templates;
+using System;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.Templating
 {
-	class CustomSolutionTemplate : SolutionTemplate
+	class TemplateCategoryTagNameProvider
 	{
-		TemplateInfo info;
+		public static readonly string MonoDevelopCategoryTagName = "md-category";
+		public static readonly string VSMacCategoryTagName = "vsmac-category";
 
-		public CustomSolutionTemplate (TemplateInfo info)
-			: base (info.Identity, info.Name, null)
+		public static readonly string[] CategoryTagNames = new string [] {
+			MonoDevelopCategoryTagName,
+			VSMacCategoryTagName
+		};
+
+		public static readonly string DefaultCategoryTagName;
+
+		static TemplateCategoryTagNameProvider ()
 		{
-			this.info = info;
-
-			Category = GetCategory (info, "other/net/general");
-			Description = info.Description;
-			Language = info.GetLanguage ();
+			DefaultCategoryTagName = GetDefaultCategoryTagName ();
 		}
 
-		public TemplateInfo Info {
-			get { return info; }
-		}
-
-		static string GetCategory (TemplateInfo info, string defaultCategory)
+		static string GetDefaultCategoryTagName ()
 		{
-			ICacheTag tag = null;
-			foreach (string tagName in TemplateCategoryTagNameProvider.CategoryTagNames) {
-				if (info.Tags.TryGetValue (tagName, out tag)) {
-					if (!string.IsNullOrEmpty (tag.DefaultValue)) {
-						return tag.DefaultValue;
-					}
+			if (BrandingService.ApplicationName != null) {
+				if (BrandingService.ApplicationName.StartsWith ("Visual Studio", StringComparison.OrdinalIgnoreCase)) {
+					return VSMacCategoryTagName;
 				}
 			}
 
-			return defaultCategory;
+			return MonoDevelopCategoryTagName;
 		}
 	}
 }

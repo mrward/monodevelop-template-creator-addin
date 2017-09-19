@@ -59,6 +59,7 @@
     <Compile Include="MonoDevelop.Templating\ProcessedCustomTemplateResult.cs" />
     <Compile Include="MonoDevelop.Templating\TemplateJsonFileChangedMonitor.cs" />
     <Compile Include="MonoDevelop.Templating\FilePathExtensions.cs" />
+    <Compile Include="MonoDevelop.Templating\TemplateCategoryTagNameProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />

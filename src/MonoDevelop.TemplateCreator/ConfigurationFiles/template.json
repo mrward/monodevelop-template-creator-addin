@@ -6,10 +6,11 @@
 	"name": "${DisplayName}",
 	"defaultName": "${DefaultProjectName}",
 	"identity": "${Identity}",
-	"groupIdentity": "${Groupidentity}",
+	"groupIdentity": "${GroupIdentity}",
 	"tags": {
 		"language": "${Language}",
-		"type": "project"
+		"type": "project",
+		"${CategoryTagName}": "other/net/general"
 	},
 	"shortName": "${ShortName}",
 	"sourceName": "${SourceName}",

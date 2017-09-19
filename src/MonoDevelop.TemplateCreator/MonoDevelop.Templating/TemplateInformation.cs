@@ -50,6 +50,7 @@ namespace MonoDevelop.Templating
 		public string Language { get; set; }
 		public string ProjectFilePrimaryOutput { get; set; }
 		public string DoubleQuotedProjectGuid { get; set; }
+		public string CategoryTagName { get; set; }
 
 		void GenerateDefaults ()
 		{
@@ -58,6 +59,8 @@ namespace MonoDevelop.Templating
 			DisplayName = project.Name;
 			Language = project.LanguageName;
 			ShortName = project.Name;
+
+			CategoryTagName = TemplateCategoryTagNameProvider.DefaultCategoryTagName;
 
 			GroupIdentity = $"MyTemplate.{project.Name}";
 			Identity = $"{GroupIdentity}.{project.GetTemplateLanguageName ()}";
