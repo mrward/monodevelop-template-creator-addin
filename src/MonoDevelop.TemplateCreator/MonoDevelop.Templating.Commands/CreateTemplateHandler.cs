@@ -95,6 +95,11 @@ namespace MonoDevelop.Templating.Commands
 		{
 			string templateFolder = templateJsonFile.ParentDirectory.ParentDirectory;
 			TemplatingServices.Options.AddTemplateFolder (templateFolder);
+
+			// Force a refresh of the template cache. This handles the case
+			// where the folder was already added as a template folder and the
+			// template.json file was added afterwards.
+			TemplatingServices.EventsService.OnTemplateFoldersChanged ();
 		}
 	}
 }
