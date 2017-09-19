@@ -1,5 +1,5 @@
 ﻿//
-// TemplatingServices.cs
+// FilePathExtensions.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -29,43 +29,20 @@ using MonoDevelop.Core;
 
 namespace MonoDevelop.Templating
 {
-	static class TemplatingServices
+	static class FilePathExtensions
 	{
-		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
-		static readonly TemplatingOptions options = new TemplatingOptions ();
-		static readonly TemplatingEngine templatingEngine = new TemplatingEngine ();
-		static readonly TemplateJsonFileChangedMonitor templateJsonFileChangedMonitor =
-			new TemplateJsonFileChangedMonitor ();
-
-		static TemplatingServices ()
+		public static bool IsTemplateJsonFile (this FilePath file)
 		{
-			Initialize ();
+			if (file.IsNullOrEmpty)
+				return false;
+
+			return EqualsIgnoringCase (file.FileName, "template.json") &&
+				EqualsIgnoringCase (file.ParentDirectory.FileName, ".template.config");
 		}
 
-		static void Initialize ()
+		static bool EqualsIgnoringCase (string x, string y)
 		{
-			eventsService.TemplateFoldersChanged += TemplateFoldersChanged;
-		}
-
-		static void TemplateFoldersChanged (object sender, EventArgs e)
-		{
-			try {
-				templatingEngine.ReloadTemplates ();
-			} catch (Exception ex) {
-				LoggingService.LogError ("Unable to reset cache.", ex);
-			}
-		}
-
-		public static TemplatingEventsService EventsService {
-			get { return eventsService; }
-		}
-
-		public static TemplatingOptions Options {
-			get { return options; }
-		}
-
-		public static TemplatingEngine TemplatingEngine {
-			get { return templatingEngine; }
+			return StringComparer.OrdinalIgnoreCase.Equals (x, y);
 		}
 	}
 }

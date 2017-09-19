@@ -1,5 +1,5 @@
 ﻿//
-// TemplatingServices.cs
+// TemplateJsonFileChangedMonitor.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,48 +24,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
 using MonoDevelop.Core;
 
 namespace MonoDevelop.Templating
 {
-	static class TemplatingServices
+	class TemplateJsonFileChangedMonitor
 	{
-		static readonly TemplatingEventsService eventsService = new TemplatingEventsService ();
-		static readonly TemplatingOptions options = new TemplatingOptions ();
-		static readonly TemplatingEngine templatingEngine = new TemplatingEngine ();
-		static readonly TemplateJsonFileChangedMonitor templateJsonFileChangedMonitor =
-			new TemplateJsonFileChangedMonitor ();
-
-		static TemplatingServices ()
+		public TemplateJsonFileChangedMonitor()
 		{
-			Initialize ();
+			FileService.FileChanged += FileChanged;
 		}
 
-		static void Initialize ()
+		void FileChanged (object sender, FileEventArgs e)
 		{
-			eventsService.TemplateFoldersChanged += TemplateFoldersChanged;
-		}
-
-		static void TemplateFoldersChanged (object sender, EventArgs e)
-		{
-			try {
-				templatingEngine.ReloadTemplates ();
-			} catch (Exception ex) {
-				LoggingService.LogError ("Unable to reset cache.", ex);
+			foreach (FileEventInfo file in e) {
+				OnFileChanged (file);
 			}
 		}
 
-		public static TemplatingEventsService EventsService {
-			get { return eventsService; }
-		}
-
-		public static TemplatingOptions Options {
-			get { return options; }
-		}
-
-		public static TemplatingEngine TemplatingEngine {
-			get { return templatingEngine; }
+		/// <summary>
+		/// Refresh the template folders if a template.json file has changed.
+		/// </summary>
+		void OnFileChanged (FileEventInfo file)
+		{
+			if (file.FileName.IsTemplateJsonFile ()) {
+				TemplatingServices.EventsService.OnTemplateFoldersChanged ();
+			}
 		}
 	}
 }
