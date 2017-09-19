@@ -44,5 +44,13 @@ namespace MonoDevelop.Templating
 		{
 			return StringComparer.OrdinalIgnoreCase.Equals (x, y);
 		}
+
+		public static bool IsTemplateConfigDirectory (this FilePath file)
+		{
+			if (file.IsNull)
+				return false;
+
+			return EqualsIgnoringCase (file.FileName, ".template.config");
+		}
 	}
 }

@@ -33,6 +33,7 @@ namespace MonoDevelop.Templating
 		public TemplateJsonFileChangedMonitor()
 		{
 			FileService.FileChanged += FileChanged;
+			FileService.FileRemoved += FileRemoved;
 		}
 
 		void FileChanged (object sender, FileEventArgs e)
@@ -48,6 +49,24 @@ namespace MonoDevelop.Templating
 		void OnFileChanged (FileEventInfo file)
 		{
 			if (file.FileName.IsTemplateJsonFile ()) {
+				TemplatingServices.EventsService.OnTemplateFoldersChanged ();
+			}
+		}
+
+		void FileRemoved (object sender, FileEventArgs e)
+		{
+			foreach (FileEventInfo file in e) {
+				OnFileRemoved (file);
+			}
+		}
+
+		/// <summary>
+		/// Refresh the template folders if a template.json file is removed or a
+		/// .template.config folder is removed.
+		/// </summary>
+		void OnFileRemoved (FileEventInfo file)
+		{
+			if (file.FileName.IsTemplateJsonFile () || file.FileName.IsTemplateConfigDirectory ()) {
 				TemplatingServices.EventsService.OnTemplateFoldersChanged ();
 			}
 		}
