@@ -67,5 +67,13 @@ namespace MonoDevelop.Templating
 			PropertyService.Set (TemplateFoldersPropertyName, templateFolders);
 			PropertyService.SaveProperties ();
 		}
+
+		public void AddTemplateFolder (string templateFolder)
+		{
+			if (!templateFolders.Contains (templateFolder)) {
+				templateFolders.Add (templateFolder);
+				TemplatingServices.EventsService.OnTemplateFoldersChanged ();
+			}
+		}
 	}
 }

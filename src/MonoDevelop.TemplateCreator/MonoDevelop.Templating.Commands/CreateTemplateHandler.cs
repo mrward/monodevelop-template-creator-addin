@@ -64,7 +64,8 @@ namespace MonoDevelop.Templating.Commands
 				var viewModel = new TemplateInformation (project);
 				using (var dialog = new TemplateInformationDialog (viewModel)) {
 					if (dialog.ShowWithParent ()) {
-						CreateTemplateJsonFile (project, viewModel);
+						FilePath templateJsonFile = CreateTemplateJsonFile (project, viewModel);
+						RegisterTemplateFolder (templateJsonFile);
 					}
 				}
 			} catch (Exception ex) {
@@ -73,7 +74,7 @@ namespace MonoDevelop.Templating.Commands
 			}
 		}
 
-		void CreateTemplateJsonFile (DotNetProject project, TemplateInformation viewModel)
+		FilePath CreateTemplateJsonFile (DotNetProject project, TemplateInformation viewModel)
 		{
 			var templateJsonFileCreator = new TemplateJsonFileCreator ();
 			templateJsonFileCreator.CreateInDirectory (project.BaseDirectory, viewModel);
@@ -86,6 +87,14 @@ namespace MonoDevelop.Templating.Commands
 				templateJsonFileCreator.TemplateJsonFilePath,
 				project,
 				true);
+
+			return templateJsonFileCreator.TemplateJsonFilePath;
+		}
+
+		void RegisterTemplateFolder (FilePath templateJsonFile)
+		{
+			string templateFolder = templateJsonFile.ParentDirectory.ParentDirectory;
+			TemplatingServices.Options.AddTemplateFolder (templateFolder);
 		}
 	}
 }
