@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using MonoDevelop.Ide.Projects;
-//
+﻿//
 // CustomProjectTemplatingProvider.cs
 //
 // Author:
@@ -28,6 +24,9 @@ using MonoDevelop.Ide.Projects;
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using MonoDevelop.Ide.Projects;
 using MonoDevelop.Ide.Templates;
 using MonoDevelop.Projects;
 

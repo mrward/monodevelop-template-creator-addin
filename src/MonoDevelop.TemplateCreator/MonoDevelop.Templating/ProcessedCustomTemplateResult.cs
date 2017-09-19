@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-//
+﻿//
 // ProcessedCustomTemplateResult.cs
 //
 // Author:
@@ -27,6 +24,8 @@ using System.Linq;
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Collections.Generic;
+using System.Linq;
 using MonoDevelop.Ide.Templates;
 using MonoDevelop.Projects;
 
