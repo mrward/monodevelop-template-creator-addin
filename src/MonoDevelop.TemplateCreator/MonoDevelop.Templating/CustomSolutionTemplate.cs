@@ -39,27 +39,13 @@ namespace MonoDevelop.Templating
 		{
 			this.info = info;
 
-			Category = GetCategory (info, "other/net/general");
+			Category = info.GetCategory ("other/net/general");
 			Description = info.Description;
 			Language = info.GetLanguage ();
 		}
 
 		public TemplateInfo Info {
 			get { return info; }
-		}
-
-		static string GetCategory (TemplateInfo info, string defaultCategory)
-		{
-			ICacheTag tag = null;
-			foreach (string tagName in TemplateCategoryTagNameProvider.CategoryTagNames) {
-				if (info.Tags.TryGetValue (tagName, out tag)) {
-					if (!string.IsNullOrEmpty (tag.DefaultValue)) {
-						return tag.DefaultValue;
-					}
-				}
-			}
-
-			return defaultCategory;
 		}
 	}
 }

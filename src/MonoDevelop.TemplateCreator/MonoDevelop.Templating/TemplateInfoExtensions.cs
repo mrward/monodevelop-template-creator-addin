@@ -40,5 +40,19 @@ namespace MonoDevelop.Templating
 
 			return string.Empty;
 		}
+
+		public static string GetCategory (this TemplateInfo info, string defaultCategory)
+		{
+			ICacheTag tag = null;
+			foreach (string tagName in TemplateCategoryTagNameProvider.CategoryTagNames) {
+				if (info.Tags.TryGetValue (tagName, out tag)) {
+					if (!string.IsNullOrEmpty (tag.DefaultValue)) {
+						return tag.DefaultValue;
+					}
+				}
+			}
+
+			return defaultCategory;
+		}
 	}
 }
