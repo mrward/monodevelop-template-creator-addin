@@ -46,6 +46,7 @@ namespace MonoDevelop.Templating.Gui
 			groupIdentityTextEntry.TextEntry.Text = viewModel.GroupIdentity;
 			identityTextEntry.TextEntry.Text = viewModel.Identity;
 			shortNameTextEntry.TextEntry.Text = viewModel.ShortName;
+			categoryTextEntry.TextEntry.Text = viewModel.Category;
 
 			authorTextEntry.TextEntry.Changed += AuthorTextEntryChanged;
 			defaultProjectNameTextEntry.TextEntry.Changed += DefaultProjectNameTextEntryChanged;
@@ -53,6 +54,7 @@ namespace MonoDevelop.Templating.Gui
 			groupIdentityTextEntry.TextEntry.Changed += GroupIdentityTextEntryChanged;
 			identityTextEntry.TextEntry.Changed += IdentityTextEntryChanged;
 			shortNameTextEntry.TextEntry.Changed += ShortNameTextEntryChanged;
+			categoryTextEntry.TextEntry.Changed += CategoryTextEntryChanged;
 		}
 
 		public bool ShowWithParent ()
@@ -89,6 +91,11 @@ namespace MonoDevelop.Templating.Gui
 		void ShortNameTextEntryChanged (object sender, EventArgs e)
 		{
 			viewModel.ShortName = shortNameTextEntry.TextEntry.Text;
+		}
+
+		void CategoryTextEntryChanged (object sender, EventArgs e)
+		{
+			viewModel.Category = categoryTextEntry.TextEntry.Text;
 		}
 	}
 }

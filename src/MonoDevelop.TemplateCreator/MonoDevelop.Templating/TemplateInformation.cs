@@ -51,6 +51,7 @@ namespace MonoDevelop.Templating
 		public string ProjectFilePrimaryOutput { get; set; }
 		public string DoubleQuotedProjectGuid { get; set; }
 		public string CategoryTagName { get; set; }
+		public string Category { get; set; }
 
 		void GenerateDefaults ()
 		{
@@ -60,6 +61,7 @@ namespace MonoDevelop.Templating
 			Language = project.LanguageName;
 			ShortName = project.Name;
 
+			Category = "other/net/general";
 			CategoryTagName = TemplateCategoryTagNameProvider.DefaultCategoryTagName;
 
 			GroupIdentity = $"MyTemplate.{project.Name}";

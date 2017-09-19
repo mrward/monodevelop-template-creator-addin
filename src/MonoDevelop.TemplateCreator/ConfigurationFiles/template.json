@@ -10,7 +10,7 @@
 	"tags": {
 		"language": "${Language}",
 		"type": "project",
-		"${CategoryTagName}": "other/net/general"
+		"${CategoryTagName}": "${Category}"
 	},
 	"shortName": "${ShortName}",
 	"sourceName": "${SourceName}",

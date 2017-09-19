@@ -41,6 +41,7 @@ namespace MonoDevelop.Templating.Gui
 		TemplateTextEntry groupIdentityTextEntry;
 		TemplateTextEntry defaultProjectNameTextEntry;
 		TemplateTextEntry displayNameTextEntry;
+		TemplateTextEntry categoryTextEntry;
 		List<Label> allLabels = new List<Label> ();
 
 		void Build ()
@@ -66,6 +67,11 @@ namespace MonoDevelop.Templating.Gui
 				mainVBox,
 				GettextCatalog.GetString ("Display Name:"));
 			allLabels.Add (displayNameTextEntry.Label);
+
+			categoryTextEntry = CreateTemplateTextEntry (
+				mainVBox,
+				GettextCatalog.GetString ("Category:"));
+			allLabels.Add (categoryTextEntry.Label);
 
 			shortNameTextEntry = CreateTemplateTextEntry (
 				mainVBox,
