@@ -1,5 +1,5 @@
 ﻿//
-// TemplateInformationDialog.UI..cs
+// TemplateInformationDialog.UI.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>

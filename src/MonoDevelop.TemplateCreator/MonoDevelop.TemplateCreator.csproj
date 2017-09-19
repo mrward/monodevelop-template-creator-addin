@@ -41,7 +41,7 @@
       <DependentUpon>TemplateFoldersOptionsWidget.cs</DependentUpon>
     </Compile>
     <Compile Include="MonoDevelop.Templating.Gui\TemplateInformationDialog.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateInformationDialog.UI..cs">
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateInformationDialog.UI.cs">
       <DependentUpon>TemplateInformationDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MonoDevelop.Templating.Gui\TemplateFoldersOptionsPanel.cs" />
