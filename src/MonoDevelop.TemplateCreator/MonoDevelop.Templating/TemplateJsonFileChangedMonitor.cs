@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using MonoDevelop.Core;
 
 namespace MonoDevelop.Templating
@@ -34,6 +35,7 @@ namespace MonoDevelop.Templating
 		{
 			FileService.FileChanged += FileChanged;
 			FileService.FileRemoved += FileRemoved;
+			FileService.FileRenamed += FileRenamed;
 		}
 
 		void FileChanged (object sender, FileEventArgs e)
@@ -67,6 +69,20 @@ namespace MonoDevelop.Templating
 		void OnFileRemoved (FileEventInfo file)
 		{
 			if (file.FileName.IsTemplateJsonFile () || file.FileName.IsTemplateConfigDirectory ()) {
+				TemplatingServices.EventsService.OnTemplateFoldersChanged ();
+			}
+		}
+
+		void FileRenamed (object sender, FileCopyEventArgs e)
+		{
+			foreach (FileCopyEventInfo file in e) {
+				FileRenamed (file);
+			}
+		}
+
+		void FileRenamed (FileCopyEventInfo file)
+		{
+			if (file.SourceFile.IsTemplateJsonFile () || file.TargetFile.IsTemplateJsonFile ()) {
 				TemplatingServices.EventsService.OnTemplateFoldersChanged ();
 			}
 		}
