@@ -55,6 +55,8 @@ namespace MonoDevelop.Templating.Gui
 			identityTextEntry.TextEntry.Changed += IdentityTextEntryChanged;
 			shortNameTextEntry.TextEntry.Changed += ShortNameTextEntryChanged;
 			categoryTextEntry.TextEntry.Changed += CategoryTextEntryChanged;
+
+			selectCategoryButton.Clicked += SelectCategoryButtonClicked;
 		}
 
 		public bool ShowWithParent ()
@@ -96,6 +98,15 @@ namespace MonoDevelop.Templating.Gui
 		void CategoryTextEntryChanged (object sender, EventArgs e)
 		{
 			viewModel.Category = categoryTextEntry.TextEntry.Text;
+		}
+
+		void SelectCategoryButtonClicked (object sender, EventArgs e)
+		{
+			using (var dialog = new TemplateCategoriesDialog ()) {
+				if (dialog.ShowWithParent ()) {
+					categoryTextEntry.TextEntry.Text = dialog.SelectedCategoryId;
+				}
+			}
 		}
 	}
 }

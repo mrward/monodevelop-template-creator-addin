@@ -60,6 +60,15 @@
     <Compile Include="MonoDevelop.Templating\TemplateJsonFileChangedMonitor.cs" />
     <Compile Include="MonoDevelop.Templating\FilePathExtensions.cs" />
     <Compile Include="MonoDevelop.Templating\TemplateCategoryTagNameProvider.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesDialog.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesDialog.UI.cs">
+      <DependentUpon>TemplateCategoriesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesWidget.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesWidget.UI.cs">
+      <DependentUpon>TemplateCategoriesWidget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />

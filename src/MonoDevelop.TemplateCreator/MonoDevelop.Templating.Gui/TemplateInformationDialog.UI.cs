@@ -42,6 +42,7 @@ namespace MonoDevelop.Templating.Gui
 		TemplateTextEntry defaultProjectNameTextEntry;
 		TemplateTextEntry displayNameTextEntry;
 		TemplateTextEntry categoryTextEntry;
+		Button selectCategoryButton;
 		List<Label> allLabels = new List<Label> ();
 
 		void Build ()
@@ -72,6 +73,10 @@ namespace MonoDevelop.Templating.Gui
 				mainVBox,
 				GettextCatalog.GetString ("Category:"));
 			allLabels.Add (categoryTextEntry.Label);
+
+			selectCategoryButton = new Button ();
+			selectCategoryButton.Label = "\u2026";
+			categoryTextEntry.HBox.PackStart (selectCategoryButton);
 
 			shortNameTextEntry = CreateTemplateTextEntry (
 				mainVBox,
@@ -116,12 +121,14 @@ namespace MonoDevelop.Templating.Gui
 			hbox.PackStart (textEntry, true, true);
 
 			return new TemplateTextEntry {
+				HBox = hbox,
 				Label = label,
 				TextEntry = textEntry
 			};
 		}
 
 		struct TemplateTextEntry {
+			public HBox HBox;
 			public Label Label;
 			public TextEntry TextEntry;
 		}
