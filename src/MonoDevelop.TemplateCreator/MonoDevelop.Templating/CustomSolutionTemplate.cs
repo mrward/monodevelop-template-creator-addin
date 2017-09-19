@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Edge.Settings;
 using MonoDevelop.Ide.Templates;
 
@@ -31,6 +32,14 @@ namespace MonoDevelop.Templating
 {
 	class CustomSolutionTemplate : SolutionTemplate
 	{
+		public static readonly string MonoDevelopCategoryTagName = "md-category";
+		public static readonly string VSMacCategoryTagName = "vsmac-category";
+
+		static readonly string[] categoryTagNames = new string [] {
+			MonoDevelopCategoryTagName,
+			VSMacCategoryTagName
+		};
+
 		TemplateInfo info;
 
 		public CustomSolutionTemplate (TemplateInfo info)
@@ -38,13 +47,27 @@ namespace MonoDevelop.Templating
 		{
 			this.info = info;
 
-			Category = "other/net/general";
+			Category = GetCategory (info, "other/net/general");
 			Description = info.Description;
 			Language = info.GetLanguage ();
 		}
 
 		public TemplateInfo Info {
 			get { return info; }
+		}
+
+		static string GetCategory (TemplateInfo info, string defaultCategory)
+		{
+			ICacheTag tag = null;
+			foreach (string tagName in categoryTagNames) {
+				if (info.Tags.TryGetValue (tagName, out tag)) {
+					if (!string.IsNullOrEmpty (tag.DefaultValue)) {
+						return tag.DefaultValue;
+					}
+				}
+			}
+
+			return defaultCategory;
 		}
 	}
 }
