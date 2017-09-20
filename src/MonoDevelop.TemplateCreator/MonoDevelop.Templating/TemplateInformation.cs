@@ -27,6 +27,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using MonoDevelop.Core;
 using MonoDevelop.Core.StringParsing;
 using MonoDevelop.Projects;
 
@@ -36,17 +37,24 @@ namespace MonoDevelop.Templating
 	{
 		DotNetProject project;
 		List<DotNetProject> projects;
+		FilePath baseDirectory;
 
 		public TemplateInformation (DotNetProject project)
+			: this (project.BaseDirectory, new [] { project })
 		{
-			this.project = project;
-			GenerateDefaults ();
 		}
 
-		public TemplateInformation (IEnumerable<DotNetProject> projects)
+		public TemplateInformation (Solution solution)
+			: this (solution.BaseDirectory, solution.GetAllDotNetProjects ())
+		{
+		}
+
+		public TemplateInformation (FilePath baseDirectory, IEnumerable<DotNetProject> projects)
 		{
 			this.projects = projects.OrderBy (p => p.Name).ToList ();
 			this.project = projects.First ();
+			this.baseDirectory = baseDirectory;
+
 			GenerateDefaults ();
 		}
 
@@ -58,10 +66,10 @@ namespace MonoDevelop.Templating
 		public string GroupIdentity { get; set; }
 		public string SourceName { get; set; }
 		public string Language { get; set; }
-		public string ProjectFilePrimaryOutput { get; set; }
-		public string DoubleQuotedProjectGuid { get; set; }
 		public string CategoryTagName { get; set; }
 		public string Category { get; set; }
+		public string[] ProjectFilePrimaryOutputs { get; set; }
+		public string[] ProjectGuids { get; set; }
 
 		void GenerateDefaults ()
 		{
@@ -77,13 +85,10 @@ namespace MonoDevelop.Templating
 			GroupIdentity = $"MyTemplate.{project.Name}";
 			Identity = $"{GroupIdentity}.{project.GetTemplateLanguageName ()}";
 
-			ProjectFilePrimaryOutput = project.FileName.FileName;
 			SourceName = project.FileName.FileNameWithoutExtension;
 
-			string guid = project.ItemId;
-			if (!string.IsNullOrEmpty (guid)) {
-				DoubleQuotedProjectGuid = "\"" + guid + "\"";
-			}
+			ProjectFilePrimaryOutputs = GetProjectFilePrimaryOutputs ().ToArray ();
+			ProjectGuids = GetProjectGuids ().ToArray ();
 		}
 
 		public object GetValue (string name)
@@ -94,6 +99,17 @@ namespace MonoDevelop.Templating
 				return property.GetValue (this) as string;
 			}
 			return null;
+		}
+
+		IEnumerable<string> GetProjectGuids ()
+		{
+			return projects.Where (p => !string.IsNullOrEmpty (p.ItemId))
+				.Select (p => p.ItemId);
+		}
+
+		IEnumerable<string> GetProjectFilePrimaryOutputs ()
+		{
+			return projects.Select (p => p.FileName.ToRelative (baseDirectory).ToString ());
 		}
 	}
 }

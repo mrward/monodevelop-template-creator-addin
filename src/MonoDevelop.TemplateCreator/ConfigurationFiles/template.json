@@ -15,9 +15,7 @@
 	"shortName": "${ShortName}",
 	"sourceName": "${SourceName}",
 	"guids": [
-		${DoubleQuotedProjectGuid}
 	],
 	"primaryOutputs": [
-		{ "path": "${ProjectFilePrimaryOutput}" }
 	]
 }

@@ -63,7 +63,7 @@ namespace MonoDevelop.Templating.Commands
 				return;
 
 			try {
-				var viewModel = new TemplateInformation (solution.GetAllDotNetProjects ());
+				var viewModel = new TemplateInformation (solution);
 				using (var dialog = new TemplateInformationDialog (viewModel)) {
 					if (dialog.ShowWithParent ()) {
 						FilePath templateJsonFile = CreateTemplateJsonFile (solution, viewModel);

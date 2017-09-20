@@ -27,29 +27,32 @@
 using System.IO;
 using System.Text;
 using MonoDevelop.Core;
-using MonoDevelop.Core.StringParsing;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace MonoDevelop.Templating
 {
 	class TemplateJsonFileCreator
 	{
-		public void CreateInDirectory (FilePath rootDirectory, IStringTagModel tagModel)
+		public void CreateInDirectory (FilePath rootDirectory, TemplateInformation template)
 		{
 			FilePath templateConfigDirectory = rootDirectory.Combine (".template.config");
 			Directory.CreateDirectory (templateConfigDirectory);
 
-			CopyTemplateJsonFile (templateConfigDirectory, tagModel);
+			CopyTemplateJsonFile (templateConfigDirectory, template);
 		}
 
-		void CopyTemplateJsonFile (FilePath templateConfigDirectory, IStringTagModel tagModel)
+		void CopyTemplateJsonFile (FilePath templateConfigDirectory, TemplateInformation template)
 		{
 			FilePath sourceFilePath = GetDefaultTemplateJsonFilePath ();
 			FilePath destinationFilePath = templateConfigDirectory.Combine (sourceFilePath.FileName);
 
-			string text = File.ReadAllText (sourceFilePath);
-			text = StringParserService.Parse (text, tagModel);
+			string json = File.ReadAllText (sourceFilePath);
+			json = StringParserService.Parse (json, template);
 
-			File.WriteAllText (destinationFilePath, text, Encoding.UTF8);
+			json = AddProjectInfo (template, json);
+
+			File.WriteAllText (destinationFilePath, json, Encoding.UTF8);
 
 			TemplateJsonFilePath = destinationFilePath;
 		}
@@ -61,5 +64,47 @@ namespace MonoDevelop.Templating
 		}
 
 		public FilePath TemplateJsonFilePath { get; private set; }
+
+		static string AddProjectInfo (TemplateInformation template, string json)
+		{
+			var jsonObject = JObject.Parse (json);
+
+			var guids = (JArray)jsonObject ["guids"];
+
+			foreach (string projectGuid in template.ProjectGuids) {
+				guids.Add (projectGuid);
+			}
+
+			var outputs = (JArray)jsonObject ["primaryOutputs"];
+
+			foreach (string primaryOutput in template.ProjectFilePrimaryOutputs) {
+				var pathProperty = new JObject {
+					["path"] = primaryOutput
+				};
+				outputs.Add (pathProperty);
+			}
+
+			return ToString (jsonObject);
+		}
+
+		/// <summary>
+		/// Indent with tabs otherwise tabs will not be used. The formatting
+		/// option tabs to spaces handles the conversion if enabled.
+		/// </summary>
+		static string ToString (JObject jsonObject)
+		{
+			var json = new StringBuilder ();
+
+			using (var writer = new StringWriter (json)) {
+				using (var jsonWriter = new JsonTextWriter (writer)) {
+					jsonWriter.IndentChar = '\t';
+					jsonWriter.Indentation = 1;
+					jsonWriter.Formatting = Formatting.Indented;
+					jsonObject.WriteTo (jsonWriter);
+				}
+			}
+
+			return json.ToString ();
+		}
 	}
 }
