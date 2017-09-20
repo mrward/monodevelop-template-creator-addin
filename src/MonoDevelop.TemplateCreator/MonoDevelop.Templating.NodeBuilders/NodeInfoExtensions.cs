@@ -1,5 +1,5 @@
-﻿﻿//
-// TemplateConfigFolderNodeBuilderExtension.cs
+﻿//
+// NodeInfoExtensions.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,47 +24,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-using System.IO;
 using MonoDevelop.Ide.Gui.Components;
-using MonoDevelop.Ide.Gui.Pads.ProjectPad;
+using Xwt.Drawing;
 
 namespace MonoDevelop.Templating.NodeBuilders
 {
-	class TemplateConfigFolderNodeBuilderExtension : NodeBuilderExtension
+	static class NodeInfoExtensions
 	{
-		public override bool CanBuildNode (Type dataType)
+		public static void FadeFolderIcon (this NodeInfo nodeInfo, ITreeBuilderContext context)
 		{
-			return typeof (TemplateConfigFolder).IsAssignableFrom (dataType);
+			nodeInfo.Icon = FadeIcon (nodeInfo.Icon, context);
+			nodeInfo.ClosedIcon = FadeIcon (nodeInfo.ClosedIcon, context);
 		}
 
-		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
+		static Image FadeIcon (Image icon, ITreeBuilderContext context)
 		{
-			var folder = (TemplateConfigFolder)dataObject;
-			return folder.HasFiles ();
-		}
-
-		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
-		{
-			var folder = (TemplateConfigFolder)dataObject;
-
-			foreach (string file in Directory.EnumerateFiles (folder.BaseDirectory)) {
-				var node = new SystemFile (file, folder.Project);
-				treeBuilder.AddChild (node);
+			Image fadedIcon = context.GetComposedIcon (icon, "fade");
+			if (fadedIcon == null) {
+				fadedIcon = icon.WithAlpha (0.5);
+				context.CacheComposedIcon (fadedIcon, "fade", icon);
 			}
-
-			foreach (string directory in Directory.EnumerateDirectories (folder.BaseDirectory)) {
-				var node = new TemplateConfigFolder (directory, folder.DotNetProject);
-				treeBuilder.AddChild (node);
-			}
-		}
-
-		/// <summary>
-		/// Ensure folder is faded so it does not look like it is part of the project.
-		/// </summary>
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
-		{
-			nodeInfo.FadeFolderIcon (Context);
+			return fadedIcon;
 		}
 	}
 }

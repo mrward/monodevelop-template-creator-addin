@@ -1,5 +1,5 @@
-﻿﻿//
-// TemplateConfigFolderNodeBuilderExtension.cs
+﻿//
+// SolutionNodeBuilderExtension.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -23,48 +23,81 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
 using System;
-using System.IO;
+using MonoDevelop.Core;
 using MonoDevelop.Ide.Gui.Components;
-using MonoDevelop.Ide.Gui.Pads.ProjectPad;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating.NodeBuilders
 {
-	class TemplateConfigFolderNodeBuilderExtension : NodeBuilderExtension
+	class SolutionNodeBuilderExtension : NodeBuilderExtension
 	{
+		public SolutionNodeBuilderExtension ()
+		{
+			TemplatingServices.EventsService.SolutionTemplateFileCreated += TemplateFileCreated;
+		}
+
+		public override void Dispose ()
+		{
+			TemplatingServices.EventsService.SolutionTemplateFileCreated -= TemplateFileCreated;
+		}
+
 		public override bool CanBuildNode (Type dataType)
 		{
-			return typeof (TemplateConfigFolder).IsAssignableFrom (dataType);
+			return typeof (Solution).IsAssignableFrom (dataType);
 		}
 
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			var folder = (TemplateConfigFolder)dataObject;
-			return folder.HasFiles ();
+			if (ShowingAllFiles (builder))
+				return false;
+
+			return HasTemplateConfigDirectory (dataObject);
+		}
+
+		bool ShowingAllFiles (ITreeBuilder builder)
+		{
+			return builder.Options ["ShowAllFiles"];
+		}
+
+		bool HasTemplateConfigDirectory (object dataObject)
+		{
+			var solution = dataObject as Solution;
+			if (solution == null)
+				return false;
+
+			return solution.HasTemplateConfigDirectory ();
 		}
 
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
 		{
-			var folder = (TemplateConfigFolder)dataObject;
+			if (ShowingAllFiles (treeBuilder))
+				return;
 
-			foreach (string file in Directory.EnumerateFiles (folder.BaseDirectory)) {
-				var node = new SystemFile (file, folder.Project);
-				treeBuilder.AddChild (node);
-			}
+			if (!HasTemplateConfigDirectory (dataObject))
+				return;
 
-			foreach (string directory in Directory.EnumerateDirectories (folder.BaseDirectory)) {
-				var node = new TemplateConfigFolder (directory, folder.DotNetProject);
-				treeBuilder.AddChild (node);
-			}
+			var solution = (Solution)dataObject;
+			//if (solution.TemplateConfigDirectoryExistsInSolution ())
+			//	return;
+
+			var folder = new SolutionTemplateConfigFolder (solution);
+			treeBuilder.AddChild (folder);
 		}
 
-		/// <summary>
-		/// Ensure folder is faded so it does not look like it is part of the project.
-		/// </summary>
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
+		void TemplateFileCreated (object sender, SolutionEventArgs e)
 		{
-			nodeInfo.FadeFolderIcon (Context);
+			RefreshSolutionNode (e.Solution);
+		}
+
+		void RefreshSolutionNode (Solution solution)
+		{
+			Runtime.RunInMainThread (() => {
+				ITreeBuilder builder = Context.GetTreeBuilder (solution);
+				if (builder != null) {
+					builder.UpdateAll ();
+				}
+			});
 		}
 	}
 }

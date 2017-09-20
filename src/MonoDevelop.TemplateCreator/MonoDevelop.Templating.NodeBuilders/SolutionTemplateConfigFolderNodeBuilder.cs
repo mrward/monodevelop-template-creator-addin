@@ -1,5 +1,5 @@
-﻿﻿//
-// TemplateConfigFolderNodeBuilderExtension.cs
+﻿//
+// SolutionTemplateConfigFolderNodeBuilder.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -26,35 +26,47 @@
 
 using System;
 using System.IO;
+using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Ide.Gui.Pads.ProjectPad;
+using Xwt.Drawing;
 
 namespace MonoDevelop.Templating.NodeBuilders
 {
-	class TemplateConfigFolderNodeBuilderExtension : NodeBuilderExtension
+	public class SolutionTemplateConfigFolderNodeBuilder : TypeNodeBuilder
 	{
-		public override bool CanBuildNode (Type dataType)
+		Image folderOpenIcon;
+		Image folderClosedIcon;
+
+		public override Type NodeDataType {
+			get { return typeof (SolutionTemplateConfigFolder); }
+		}
+
+		protected override void Initialize ()
 		{
-			return typeof (TemplateConfigFolder).IsAssignableFrom (dataType);
+			base.Initialize ();
+
+			folderOpenIcon = Context.GetIcon (Stock.OpenFolder);
+			folderClosedIcon = Context.GetIcon (Stock.ClosedFolder);
 		}
 
 		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
 		{
-			var folder = (TemplateConfigFolder)dataObject;
+			var folder = (SolutionTemplateConfigFolder)dataObject;
 			return folder.HasFiles ();
 		}
 
 		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
 		{
-			var folder = (TemplateConfigFolder)dataObject;
+			var folder = (SolutionTemplateConfigFolder)dataObject;
 
 			foreach (string file in Directory.EnumerateFiles (folder.BaseDirectory)) {
-				var node = new SystemFile (file, folder.Project);
+				var node = new SystemFile (file, folder.Solution);
 				treeBuilder.AddChild (node);
 			}
 
 			foreach (string directory in Directory.EnumerateDirectories (folder.BaseDirectory)) {
-				var node = new TemplateConfigFolder (directory, folder.DotNetProject);
+				var node = new SolutionTemplateConfigFolder (directory, folder.Solution);
 				treeBuilder.AddChild (node);
 			}
 		}
@@ -64,7 +76,25 @@ namespace MonoDevelop.Templating.NodeBuilders
 		/// </summary>
 		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
 		{
+			var folder = (SolutionTemplateConfigFolder)dataObject;
+
+			nodeInfo.Label = GLib.Markup.EscapeText (folder.Name);
+			nodeInfo.Icon = folderOpenIcon;
+			nodeInfo.ClosedIcon = folderClosedIcon;
+
 			nodeInfo.FadeFolderIcon (Context);
+		}
+
+		public override string GetNodeName (ITreeNavigator thisNode, object dataObject)
+		{
+			var folder = (SolutionTemplateConfigFolder)dataObject;
+			return folder.Name;
+		}
+
+		public override int GetSortIndex (ITreeNavigator node)
+		{
+			// Same sort index as the default SolutionFolderNodeBuilder.
+			return -1000;
 		}
 	}
 }

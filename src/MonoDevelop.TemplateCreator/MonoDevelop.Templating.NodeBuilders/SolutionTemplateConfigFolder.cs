@@ -1,5 +1,5 @@
-﻿﻿//
-// TemplateConfigFolderNodeBuilderExtension.cs
+﻿//
+// SolutionTemplateConfigFolder.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,47 +24,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
 using System.IO;
-using MonoDevelop.Ide.Gui.Components;
-using MonoDevelop.Ide.Gui.Pads.ProjectPad;
+using System.Linq;
+using MonoDevelop.Core;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating.NodeBuilders
 {
-	class TemplateConfigFolderNodeBuilderExtension : NodeBuilderExtension
+	public class SolutionTemplateConfigFolder
 	{
-		public override bool CanBuildNode (Type dataType)
+		public SolutionTemplateConfigFolder (Solution solution)
+			: this (solution.GetTemplateConfigDirectory (), solution)
 		{
-			return typeof (TemplateConfigFolder).IsAssignableFrom (dataType);
 		}
 
-		public override bool HasChildNodes (ITreeBuilder builder, object dataObject)
+		public SolutionTemplateConfigFolder (FilePath directory, Solution solution)
 		{
-			var folder = (TemplateConfigFolder)dataObject;
-			return folder.HasFiles ();
+			BaseDirectory = directory;
+			Solution = solution;
+			Name = directory.FileName;
 		}
 
-		public override void BuildChildNodes (ITreeBuilder treeBuilder, object dataObject)
+		public FilePath BaseDirectory { get; private set; }
+		public Solution Solution { get; private set; }
+		public string Name { get; private set; }
+
+		public bool HasFiles ()
 		{
-			var folder = (TemplateConfigFolder)dataObject;
-
-			foreach (string file in Directory.EnumerateFiles (folder.BaseDirectory)) {
-				var node = new SystemFile (file, folder.Project);
-				treeBuilder.AddChild (node);
-			}
-
-			foreach (string directory in Directory.EnumerateDirectories (folder.BaseDirectory)) {
-				var node = new TemplateConfigFolder (directory, folder.DotNetProject);
-				treeBuilder.AddChild (node);
-			}
-		}
-
-		/// <summary>
-		/// Ensure folder is faded so it does not look like it is part of the project.
-		/// </summary>
-		public override void BuildNode (ITreeBuilder treeBuilder, object dataObject, NodeInfo nodeInfo)
-		{
-			nodeInfo.FadeFolderIcon (Context);
+			return Directory.Exists (BaseDirectory) &&
+				Directory.EnumerateFileSystemEntries (BaseDirectory).Any ();
 		}
 	}
 }

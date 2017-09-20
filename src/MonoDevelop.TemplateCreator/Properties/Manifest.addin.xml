@@ -44,6 +44,8 @@
 
 	<Extension path="/MonoDevelop/Ide/Pads/ProjectPad">
 		<NodeBuilder class="MonoDevelop.Templating.NodeBuilders.ProjectNodeBuilderExtension" />
+		<NodeBuilder class="MonoDevelop.Templating.NodeBuilders.SolutionNodeBuilderExtension" />
+		<NodeBuilder class="MonoDevelop.Templating.NodeBuilders.SolutionTemplateConfigFolderNodeBuilder" />
 		<NodeBuilder class="MonoDevelop.Templating.NodeBuilders.TemplateConfigFolderNodeBuilderExtension" />
 	</Extension>
 

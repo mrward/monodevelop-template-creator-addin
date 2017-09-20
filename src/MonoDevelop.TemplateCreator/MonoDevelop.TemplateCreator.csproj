@@ -73,6 +73,10 @@
     <Compile Include="MonoDevelop.Templating\IFolderItemExtensions.cs" />
     <Compile Include="MonoDevelop.Templating\SolutionExtensions.cs" />
     <Compile Include="MonoDevelop.Templating.Commands\CreateTemplateHandlerBase.cs" />
+    <Compile Include="MonoDevelop.Templating.NodeBuilders\SolutionNodeBuilderExtension.cs" />
+    <Compile Include="MonoDevelop.Templating.NodeBuilders\SolutionTemplateConfigFolder.cs" />
+    <Compile Include="MonoDevelop.Templating.NodeBuilders\SolutionTemplateConfigFolderNodeBuilder.cs" />
+    <Compile Include="MonoDevelop.Templating.NodeBuilders\NodeInfoExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />
