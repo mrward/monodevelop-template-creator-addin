@@ -41,5 +41,10 @@ namespace MonoDevelop.Templating
 		{
 			return solution.GetAllProjects ().OfType<DotNetProject> ();
 		}
+
+		public static bool AnyProjectHasTemplateJsonFile (this Solution solution)
+		{
+			return solution.GetAllDotNetProjects ().Any (project => project.HasTemplateJsonFile ());
+		}
 	}
 }

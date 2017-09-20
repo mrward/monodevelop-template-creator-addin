@@ -50,7 +50,8 @@ namespace MonoDevelop.Templating.Commands
 			Solution solution = GetSelectedSolution ();
 			if (solution != null) {
 				return solution.HasAnyDotNetProjects () &&
-					!solution.HasTemplateJsonFile ();
+					!solution.HasTemplateJsonFile () &&
+					!solution.AnyProjectHasTemplateJsonFile ();
 			}
 
 			return false;

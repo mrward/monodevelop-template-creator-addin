@@ -48,8 +48,10 @@ namespace MonoDevelop.Templating.Commands
 		bool IsCommandVisible ()
 		{
 			DotNetProject project = GetSelectedDotNetProject ();
-			if (project != null)
-				return !project.HasTemplateJsonFile ();
+			if (project != null) {
+				return !project.HasTemplateJsonFile () &&
+					!project.ParentSolution.HasTemplateJsonFile ();
+			}
 
 			return false;
 		}
