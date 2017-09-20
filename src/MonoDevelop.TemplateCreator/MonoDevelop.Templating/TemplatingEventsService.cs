@@ -51,5 +51,12 @@ namespace MonoDevelop.Templating
 		{
 			TemplateFoldersChanged?.Invoke (this, new EventArgs ());
 		}
+
+		public event EventHandler<SolutionEventArgs> RefreshSolutionTemplateConfigFolder;
+
+		public void OnRefreshSolutionTemplateConfigFolder (Solution solution)
+		{
+			RefreshSolutionTemplateConfigFolder?.Invoke (this, new SolutionEventArgs (solution));
+		}
 	}
 }

@@ -31,7 +31,7 @@ using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating.NodeBuilders
 {
-	public class SolutionTemplateConfigFolder
+	public class SolutionTemplateConfigFolder : IFolderItem
 	{
 		public SolutionTemplateConfigFolder (Solution solution)
 			: this (solution.GetTemplateConfigDirectory (), solution)

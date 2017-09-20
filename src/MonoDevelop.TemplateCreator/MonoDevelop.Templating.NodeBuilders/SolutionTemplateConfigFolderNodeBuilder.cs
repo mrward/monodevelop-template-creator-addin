@@ -29,6 +29,7 @@ using System.IO;
 using MonoDevelop.Ide.Gui;
 using MonoDevelop.Ide.Gui.Components;
 using MonoDevelop.Ide.Gui.Pads.ProjectPad;
+using MonoDevelop.Templating.Commands;
 using Xwt.Drawing;
 
 namespace MonoDevelop.Templating.NodeBuilders
@@ -40,6 +41,10 @@ namespace MonoDevelop.Templating.NodeBuilders
 
 		public override Type NodeDataType {
 			get { return typeof (SolutionTemplateConfigFolder); }
+		}
+
+		public override Type CommandHandlerType {
+			get { return typeof (SolutionTemplateConfigFolderNodeCommandHandler); }
 		}
 
 		protected override void Initialize ()

@@ -35,11 +35,13 @@ namespace MonoDevelop.Templating.NodeBuilders
 		public SolutionNodeBuilderExtension ()
 		{
 			TemplatingServices.EventsService.SolutionTemplateFileCreated += TemplateFileCreated;
+			TemplatingServices.EventsService.RefreshSolutionTemplateConfigFolder += RefreshSolutionTemplateConfigFolder;
 		}
 
 		public override void Dispose ()
 		{
 			TemplatingServices.EventsService.SolutionTemplateFileCreated -= TemplateFileCreated;
+			TemplatingServices.EventsService.RefreshSolutionTemplateConfigFolder -= RefreshSolutionTemplateConfigFolder;
 		}
 
 		public override bool CanBuildNode (Type dataType)
@@ -86,6 +88,11 @@ namespace MonoDevelop.Templating.NodeBuilders
 		}
 
 		void TemplateFileCreated (object sender, SolutionEventArgs e)
+		{
+			RefreshSolutionNode (e.Solution);
+		}
+
+		void RefreshSolutionTemplateConfigFolder (object sender, SolutionEventArgs e)
 		{
 			RefreshSolutionNode (e.Solution);
 		}
