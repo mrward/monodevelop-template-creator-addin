@@ -1,5 +1,5 @@
-﻿﻿//
-// CreateTemplateHandler.cs
+﻿//
+// CreateTemplateForSolutionHandler.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -33,39 +33,41 @@ using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating.Commands
 {
-	class CreateTemplateHandler : CreateTemplateHandlerBase
+	class CreateTemplateForSolutionHandler : CreateTemplateHandlerBase
 	{
 		protected override void Update (CommandInfo info)
 		{
 			info.Visible = IsCommandVisible ();
 		}
 
-		DotNetProject GetSelectedDotNetProject ()
+		Solution GetSelectedSolution ()
 		{
-			return IdeApp.ProjectOperations.CurrentSelectedProject as DotNetProject;
+			return IdeApp.ProjectOperations.CurrentSelectedSolution as Solution;
 		}
 
 		bool IsCommandVisible ()
 		{
-			DotNetProject project = GetSelectedDotNetProject ();
-			if (project != null)
-				return !project.HasTemplateJsonFile ();
+			Solution solution = GetSelectedSolution ();
+			if (solution != null) {
+				return solution.HasAnyDotNetProjects () &&
+					!solution.HasTemplateJsonFile ();
+			}
 
 			return false;
 		}
 
 		protected override void Run ()
 		{
-			var project = GetSelectedDotNetProject ();
-			if (project == null)
+			Solution solution = GetSelectedSolution ();
+			if (solution == null)
 				return;
 
 			try {
-				var viewModel = new TemplateInformation (project);
+				var viewModel = new TemplateInformation (solution.GetAllDotNetProjects ());
 				using (var dialog = new TemplateInformationDialog (viewModel)) {
 					if (dialog.ShowWithParent ()) {
-						FilePath templateJsonFile = CreateTemplateJsonFile (project, viewModel);
-						TemplatingServices.EventsService.OnTemplateFileCreated (project);
+						FilePath templateJsonFile = CreateTemplateJsonFile (solution, viewModel);
+						TemplatingServices.EventsService.OnTemplateFileCreated (solution);
 						RegisterTemplateFolder (templateJsonFile);
 					}
 				}

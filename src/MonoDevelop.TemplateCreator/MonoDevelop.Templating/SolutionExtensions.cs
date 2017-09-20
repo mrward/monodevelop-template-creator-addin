@@ -1,5 +1,5 @@
 ﻿//
-// TemplatingEventsService.cs
+// SolutionExtensions.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,32 +24,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating
 {
-	class TemplatingEventsService
+	static class SolutionExtensions
 	{
-		public event EventHandler<ProjectEventArgs> ProjectTemplateFileCreated;
-
-		public void OnTemplateFileCreated (DotNetProject project)
+		public static bool HasAnyDotNetProjects (this Solution solution)
 		{
-			ProjectTemplateFileCreated?.Invoke (this, new ProjectEventArgs (project));
+			return solution.GetAllDotNetProjects ().Any ();
 		}
 
-		public event EventHandler<SolutionEventArgs> SolutionTemplateFileCreated;
-
-		public void OnTemplateFileCreated (Solution solution)
+		public static IEnumerable<DotNetProject> GetAllDotNetProjects (this Solution solution)
 		{
-			SolutionTemplateFileCreated?.Invoke (this, new SolutionEventArgs (solution));
-		}
-
-		public event EventHandler TemplateFoldersChanged;
-
-		public void OnTemplateFoldersChanged ()
-		{
-			TemplateFoldersChanged?.Invoke (this, new EventArgs ());
+			return solution.GetAllProjects ().OfType<DotNetProject> ();
 		}
 	}
 }

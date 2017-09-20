@@ -1,5 +1,5 @@
 ﻿//
-// TemplatingEventsService.cs
+// IFolderItemExtensions.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,32 +24,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
+using System.IO;
+using MonoDevelop.Core;
 using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating
 {
-	class TemplatingEventsService
+	static class IFolderItemExtensions
 	{
-		public event EventHandler<ProjectEventArgs> ProjectTemplateFileCreated;
-
-		public void OnTemplateFileCreated (DotNetProject project)
+		public static FilePath GetTemplateJsonFilePath (this IFolderItem folderItem)
 		{
-			ProjectTemplateFileCreated?.Invoke (this, new ProjectEventArgs (project));
+			FilePath templateConfigDirectory = folderItem.GetTemplateConfigDirectory ();
+			return templateConfigDirectory.Combine ("template.json");
 		}
 
-		public event EventHandler<SolutionEventArgs> SolutionTemplateFileCreated;
-
-		public void OnTemplateFileCreated (Solution solution)
+		public static FilePath GetTemplateConfigDirectory (this IFolderItem folderItem)
 		{
-			SolutionTemplateFileCreated?.Invoke (this, new SolutionEventArgs (solution));
+			return folderItem.BaseDirectory.Combine (".template.config");
 		}
 
-		public event EventHandler TemplateFoldersChanged;
-
-		public void OnTemplateFoldersChanged ()
+		public static bool HasTemplateJsonFile (this IFolderItem folderItem)
 		{
-			TemplateFoldersChanged?.Invoke (this, new EventArgs ());
+			FilePath fileName = folderItem.GetTemplateJsonFilePath ();
+			return File.Exists (fileName);
+		}
+
+		public static bool HasTemplateConfigDirectory (this IFolderItem folderItem)
+		{
+			FilePath templateConfigDirectory = folderItem.GetTemplateConfigDirectory ();
+			return Directory.Exists (templateConfigDirectory);
 		}
 	}
 }

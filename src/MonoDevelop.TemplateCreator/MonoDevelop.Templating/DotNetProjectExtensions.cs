@@ -33,29 +33,6 @@ namespace MonoDevelop.Templating
 {
 	static class DotNetProjectExtensions
 	{
-		public static FilePath GetTemplateJsonFilePath (this DotNetProject project)
-		{
-			FilePath templateConfigDirectory = project.GetTemplateConfigDirectory ();
-			return templateConfigDirectory.Combine ("template.json");
-		}
-
-		public static FilePath GetTemplateConfigDirectory (this DotNetProject project)
-		{
-			return project.BaseDirectory.Combine (".template.config");
-		}
-
-		public static bool HasTemplateJsonFile (this DotNetProject project)
-		{
-			FilePath fileName = project.GetTemplateJsonFilePath ();
-			return File.Exists (fileName);
-		}
-
-		public static bool HasTemplateConfigDirectory (this DotNetProject project)
-		{
-			FilePath templateConfigDirectory = project.GetTemplateConfigDirectory ();
-			return Directory.Exists (templateConfigDirectory);
-		}
-
 		public static string GetTemplateLanguageName (this DotNetProject project)
 		{
 			return project.LanguageName.Replace ("#", "Sharp");

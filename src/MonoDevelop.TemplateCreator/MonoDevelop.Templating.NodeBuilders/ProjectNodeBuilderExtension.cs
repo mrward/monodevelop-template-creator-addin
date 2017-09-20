@@ -35,12 +35,12 @@ namespace MonoDevelop.Templating.NodeBuilders
 	{
 		public ProjectNodeBuilderExtension ()
 		{
-			TemplatingServices.EventsService.TemplateFileCreated += TemplateFileCreated;
+			TemplatingServices.EventsService.ProjectTemplateFileCreated += TemplateFileCreated;
 		}
 
 		public override void Dispose ()
 		{
-			TemplatingServices.EventsService.TemplateFileCreated -= TemplateFileCreated;
+			TemplatingServices.EventsService.ProjectTemplateFileCreated -= TemplateFileCreated;
 		}
 
 		public override bool CanBuildNode (Type dataType)

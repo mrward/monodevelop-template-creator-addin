@@ -11,6 +11,11 @@
 				_description="Creates a template"
 				_label="Create Template..."
 				defaultHandler="MonoDevelop.Templating.Commands.CreateTemplateHandler" />
+			<Command
+				id="MonoDevelop.Templating.Commands.CreateTemplateForSolution"
+				_description="Creates a template"
+				_label="Create Template..."
+				defaultHandler="MonoDevelop.Templating.Commands.CreateTemplateForSolutionHandler" />
 		</Category>
 	</Extension>
 
@@ -23,6 +28,16 @@
 			<CommandItem
 				id="MonoDevelop.Templating.Commands.CreateTemplate"
 				insertafter="CreateTemplateSeparator"
+				insertbefore="MonoDevelop.Ide.Commands.ProjectCommands.CustomCommandList" />
+		</Condition>
+		<Condition id="ItemType" value="Solution">
+			<SeparatorItem
+				id="CreateTemplateForSolutionSeparator"
+				insertafter="MonoDevelop.Ide.Commands.ProjectCommands.Unload"
+				insertbefore="MonoDevelop.Ide.Commands.ProjectCommands.CustomCommandList" />
+			<CommandItem
+				id="MonoDevelop.Templating.Commands.CreateTemplateForSolution"
+				insertafter="CreateTemplateForSolutionSeparator"
 				insertbefore="MonoDevelop.Ide.Commands.ProjectCommands.CustomCommandList" />
 		</Condition>
 	</Extension>

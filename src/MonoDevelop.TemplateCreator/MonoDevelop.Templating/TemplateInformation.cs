@@ -24,6 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using MonoDevelop.Core.StringParsing;
 using MonoDevelop.Projects;
@@ -33,10 +35,18 @@ namespace MonoDevelop.Templating
 	class TemplateInformation : IStringTagModel
 	{
 		DotNetProject project;
+		List<DotNetProject> projects;
 
 		public TemplateInformation (DotNetProject project)
 		{
 			this.project = project;
+			GenerateDefaults ();
+		}
+
+		public TemplateInformation (IEnumerable<DotNetProject> projects)
+		{
+			this.projects = projects.OrderBy (p => p.Name).ToList ();
+			this.project = projects.First ();
 			GenerateDefaults ();
 		}
 

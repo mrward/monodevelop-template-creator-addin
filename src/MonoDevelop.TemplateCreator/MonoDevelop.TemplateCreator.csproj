@@ -69,6 +69,10 @@
       <DependentUpon>TemplateCategoriesWidget.cs</DependentUpon>
     </Compile>
     <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoryViewModel.cs" />
+    <Compile Include="MonoDevelop.Templating.Commands\CreateTemplateForSolutionHandler.cs" />
+    <Compile Include="MonoDevelop.Templating\IFolderItemExtensions.cs" />
+    <Compile Include="MonoDevelop.Templating\SolutionExtensions.cs" />
+    <Compile Include="MonoDevelop.Templating.Commands\CreateTemplateHandlerBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />
