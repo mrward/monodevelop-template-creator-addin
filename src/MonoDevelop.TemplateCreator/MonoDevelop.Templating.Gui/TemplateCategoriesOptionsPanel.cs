@@ -1,5 +1,5 @@
 ﻿//
-// TemplateCategoriesDialog.cs
+// TemplateCategoriesOptionsPanel.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,48 +24,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-using MonoDevelop.Ide;
-using Xwt;
+using MonoDevelop.Components;
+using MonoDevelop.Ide.Gui.Dialogs;
 
 namespace MonoDevelop.Templating.Gui
 {
-	partial class TemplateCategoriesDialog
+	class TemplateCategoriesOptionsPanel : OptionsPanel
 	{
-		string selectedCategoryId;
+		TemplateCategoriesOptionsViewModel viewModel;
 
-		public TemplateCategoriesDialog ()
+		public override bool ValidateChanges ()
 		{
-			Build ();
-
-			templateCategoriesWidget.AddTemplateCategories (TemplatingServices.GetProjectTemplateCategories ());
-
-			templateCategoriesWidget.SelectedCategoryChanged += SelectedCategoryChanged;
+			return viewModel.ValidateChanges ();
 		}
 
-		public bool ShowWithParent ()
+		public override void ApplyChanges ()
 		{
-			WindowFrame parent = Toolkit.CurrentEngine.WrapWindow (IdeApp.Workbench.RootWindow);
-			return Run (parent) == Command.Ok;
+			viewModel.Save ();
 		}
 
-		void SelectedCategoryChanged (object sender, EventArgs e)
+		public override Control CreatePanelWidget ()
 		{
-			var category = templateCategoriesWidget.SelectedCategory;
-			if (category?.IsBottomLevel == true) {
-				SelectedCategoryId = category?.GetCategoryIdPath ();
-			} else {
-				SelectedCategoryId = null;
-			}
-		}
-
-		public string SelectedCategoryId {
-			get { return selectedCategoryId; }
-			private set {
-				selectedCategoryId = value;
-
-				okButton.Sensitive = !string.IsNullOrEmpty (selectedCategoryId);
-			}
+			viewModel = new TemplateCategoriesOptionsViewModel ();
+			var widget = new TemplateCategoriesOptionsWidget (viewModel);
+			return widget.ToGtkWidget ();
 		}
 	}
 }

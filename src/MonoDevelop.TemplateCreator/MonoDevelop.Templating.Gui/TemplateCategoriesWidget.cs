@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MonoDevelop.Ide.Templates;
 using Xwt;
@@ -39,10 +40,6 @@ namespace MonoDevelop.Templating.Gui
 		{
 			Build ();
 
-			AddTemplateCategories ();
-
-			treeView.ExpandAll ();
-
 			treeView.SelectionChanged += TreeViewSelectionChanged;
 		}
 
@@ -55,31 +52,42 @@ namespace MonoDevelop.Templating.Gui
 				}
 			}
 		}
+
 		public event EventHandler SelectedCategoryChanged;
 
-		void AddTemplateCategories ()
+		public void AddTemplateCategories (IEnumerable<TemplateCategory> categories)
 		{
-			foreach (TemplateCategory category in TemplatingServices.GetProjectTemplateCategories ()) {
-				AddTemplateCategory (null, null, category);
+			AddTemplateCategories (GetCategoryViewModels (categories));
+		}
+
+		IEnumerable<TemplateCategoryViewModel> GetCategoryViewModels (
+			IEnumerable<TemplateCategory> categories)
+		{
+			return categories.Select (category => new TemplateCategoryViewModel (null, category));
+		}
+
+		public void AddTemplateCategories (IEnumerable<TemplateCategoryViewModel> categories)
+		{
+			foreach (TemplateCategoryViewModel category in categories) {
+				AddTemplateCategory (null, category);
 			}
+
+			treeView.ExpandAll ();
 		}
 
 		TreePosition AddTemplateCategory (
 			TreePosition position,
-			TemplateCategoryViewModel parentViewModel,
-			TemplateCategory category)
+			TemplateCategoryViewModel categoryViewModel)
 		{
-			var categoryViewModel = new TemplateCategoryViewModel (parentViewModel, category);
-
 			TreeNavigator node = treeStore.AddNode (position);
-			node.SetValue (nameColumn, category.Name);
+			node.SetValue (nameColumn, categoryViewModel.Name);
 			node.SetValue (categoryColumn, categoryViewModel);
 
-			foreach (TemplateCategory childCategory in category.Categories) {
-				AddTemplateCategory (node.CurrentPosition, categoryViewModel, childCategory);
+			foreach (TemplateCategoryViewModel childCategory in categoryViewModel.GetChildCategories ()) {
+				AddTemplateCategory (node.CurrentPosition, childCategory);
 			}
 
-			return position;
+			return node.CurrentPosition;
 		}
 
 		void TreeViewSelectionChanged (object sender, EventArgs e)
@@ -93,6 +101,53 @@ namespace MonoDevelop.Templating.Gui
 			}
 
 			SelectedCategory = null;
+		}
+
+		public void AddTopLevelCategory (TemplateCategoryViewModel category)
+		{
+			TreePosition position = AddTemplateCategory (null, category);
+			treeView.ExpandRow (position, true);
+
+			// Ensure last child is visible and selected.
+			TreeNavigator navigator = treeStore.GetNavigatorAt (position);
+			navigator.MoveToChild ();
+			navigator.MoveToChild ();
+			treeView.ScrollToRow (navigator.CurrentPosition);
+			treeView.SelectRow (navigator.CurrentPosition);
+		}
+
+		public void UpdateTemplateCategoryName (TemplateCategoryViewModel category)
+		{
+			TreeNavigator navigator = FindCategoryNavigator (category);
+
+			if (navigator != null) {
+				navigator.SetValue (nameColumn, category.Name);
+			}
+		}
+
+		TreeNavigator FindCategoryNavigator (TemplateCategoryViewModel category)
+		{
+			return treeStore.FindNavigators (category, categoryColumn)
+				.FirstOrDefault ();
+		}
+
+		public void RemoveTemplateCategory (TemplateCategoryViewModel category)
+		{
+			TreeNavigator navigator = FindCategoryNavigator (category);
+			if (navigator != null) {
+				navigator.Remove ();
+			}
+		}
+
+		public void AddChildTemplateCategory (
+			TemplateCategoryViewModel parentCategory,
+			TemplateCategoryViewModel category)
+		{
+			TreeNavigator navigator = FindCategoryNavigator (parentCategory);
+			if (navigator != null) {
+				AddTemplateCategory (navigator.CurrentPosition, category);
+				treeView.ExpandRow (navigator.CurrentPosition, true);
+			}
 		}
 	}
 }

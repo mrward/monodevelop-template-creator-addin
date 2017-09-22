@@ -24,12 +24,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.Collections.Generic;
+using System.Linq;
 using MonoDevelop.Ide.Templates;
 
 namespace MonoDevelop.Templating.Gui
 {
 	class TemplateCategoryViewModel
 	{
+		List<TemplateCategoryViewModel> childCategories;
+		string id;
+		string name;
+
 		public TemplateCategoryViewModel (
 			TemplateCategoryViewModel parentCategory,
 			TemplateCategory category)
@@ -38,11 +44,16 @@ namespace MonoDevelop.Templating.Gui
 			Category = category;
 
 			IsBottomLevel = GetIsBottomLevel ();
+			IsTopLevel = parentCategory == null;
+
+			id = category.Id;
+			name = category.Name;
 		}
 
 		public TemplateCategoryViewModel ParentCategory { get; private set; }
 		public TemplateCategory Category { get; private set; }
 		public bool IsBottomLevel { get; private set; }
+		public bool IsTopLevel { get; private set; }
 
 		public string GetCategoryIdPath ()
 		{
@@ -64,6 +75,58 @@ namespace MonoDevelop.Templating.Gui
 			}
 
 			return parentCount == 2;
+		}
+
+		public TemplateCategoryViewModel AddCategory (TemplateCategory category)
+		{
+			GetChildCategories ();
+
+			var viewModel = new TemplateCategoryViewModel (this, category);
+
+			childCategories.Add (viewModel);
+
+			return viewModel;
+		}
+
+		public void RemoveCategory (TemplateCategoryViewModel selectedCategory)
+		{
+			GetChildCategories ();
+
+			childCategories.Remove (selectedCategory);
+		}
+
+		public string Id {
+			get { return id; }
+			set {
+				if (id != value) {
+					id = value;
+					IsModified = true;
+				}
+			}
+		}
+
+		public string Name {
+			get { return name; }
+			set {
+				if (name != value) {
+					name = value;
+					IsModified = true;
+				}
+			}
+		}
+
+		public bool IsModified { get; private set; }
+
+		public IEnumerable<TemplateCategoryViewModel> GetChildCategories ()
+		{
+			if (childCategories == null) {
+				childCategories = Category
+					.Categories
+					.Select (childCategory => new TemplateCategoryViewModel (this, childCategory))
+					.ToList ();
+			}
+
+			return childCategories;
 		}
 	}
 }

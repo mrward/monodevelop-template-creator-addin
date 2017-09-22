@@ -1,5 +1,5 @@
 ﻿//
-// TemplateCategoriesDialog.cs
+// TemplateCategoryWidget.UI.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,48 +24,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-using MonoDevelop.Ide;
+using MonoDevelop.Core;
 using Xwt;
 
 namespace MonoDevelop.Templating.Gui
 {
-	partial class TemplateCategoriesDialog
+	partial class TemplateCategoryWidget : Widget
 	{
-		string selectedCategoryId;
+		HBox hbox;
+		TextEntry idTextEntry;
+		TextEntry nameTextEntry;
 
-		public TemplateCategoriesDialog ()
+		void Build ()
 		{
-			Build ();
+			hbox = new HBox ();
+			hbox.Margin = 10;
 
-			templateCategoriesWidget.AddTemplateCategories (TemplatingServices.GetProjectTemplateCategories ());
+			Content = hbox;
 
-			templateCategoriesWidget.SelectedCategoryChanged += SelectedCategoryChanged;
-		}
+			var idLabel = new Label ();
+			idLabel.Text = GettextCatalog.GetString ("Id:");
+			hbox.PackStart (idLabel);
 
-		public bool ShowWithParent ()
-		{
-			WindowFrame parent = Toolkit.CurrentEngine.WrapWindow (IdeApp.Workbench.RootWindow);
-			return Run (parent) == Command.Ok;
-		}
+			idTextEntry = new TextEntry ();
+			hbox.PackStart (idTextEntry);
 
-		void SelectedCategoryChanged (object sender, EventArgs e)
-		{
-			var category = templateCategoriesWidget.SelectedCategory;
-			if (category?.IsBottomLevel == true) {
-				SelectedCategoryId = category?.GetCategoryIdPath ();
-			} else {
-				SelectedCategoryId = null;
-			}
-		}
+			var nameLabel = new Label ();
+			nameLabel.Text = GettextCatalog.GetString ("Name:");
+			hbox.PackStart (nameLabel);
 
-		public string SelectedCategoryId {
-			get { return selectedCategoryId; }
-			private set {
-				selectedCategoryId = value;
-
-				okButton.Sensitive = !string.IsNullOrEmpty (selectedCategoryId);
-			}
+			nameTextEntry = new TextEntry ();
+			hbox.PackStart (nameTextEntry);
 		}
 	}
 }

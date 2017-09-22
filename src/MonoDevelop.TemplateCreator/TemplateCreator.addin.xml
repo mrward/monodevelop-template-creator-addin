@@ -68,8 +68,13 @@
 	<Extension path="/MonoDevelop/Ide/GlobalOptionsDialog">
 		<Section id="Templating" _label="Templates" insertafter="VersionControl" insertbefore="Other">
 			<Section
+				id="TemplateCategories"
+				_label="Custom Categories"
+				fill="true"
+				class="MonoDevelop.Templating.Gui.TemplateCategoriesOptionsPanel" />
+			<Section
 				id="TemplateFolders"
-				_label="Template Folders"
+				_label="Custom Folders"
 				fill="true"
 				class="MonoDevelop.Templating.Gui.TemplateFoldersOptionsPanel" />
 		</Section>
@@ -79,5 +84,9 @@
 		<Class
 			id="MonoDevelop.CustomProjectTemplateProvider"
 			class="MonoDevelop.Templating.CustomProjectTemplatingProvider" />
+	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/ProjectTemplateCategories">
+		<!--CUSTOM-PROJECT-TEMPLATE-CATEGORIES-->
 	</Extension>
 </Addin>
