@@ -1,8 +1,24 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ExtensionModel>
+﻿<Addin
+	name        = "Template Creator"
+	id          = "TemplateCreator"
+	namespace   = "MonoDevelop"
+	author      = "Matt Ward"
+	copyright   = "MIT"
+	url         = "https://github.com/mrward/monodevelop-template-creator"
+	description = "Create project templates for Visual Studio for Mac"
+	category    = "IDE extensions"
+	version     = "0.1">
+
 	<Runtime>
+		<Import assembly="MonoDevelop.TemplateCreator.dll" />
+		<Import file="MonoDevelop.TemplateCreator.dll" />
 		<Import file="ConfigurationFiles/template.json" />
 	</Runtime>
+
+	<Dependencies>
+		<Addin id="::MonoDevelop.Core" version="7.1"/>
+		<Addin id="::MonoDevelop.Ide" version="7.1"/>
+	</Dependencies>
 
 	<Extension path="/MonoDevelop/Ide/Commands">
 		<Category _name="Template Creator" id="TemplateCreator">
@@ -64,4 +80,4 @@
 			id="MonoDevelop.CustomProjectTemplateProvider"
 			class="MonoDevelop.Templating.CustomProjectTemplatingProvider" />
 	</Extension>
-</ExtensionModel>
+</Addin>
