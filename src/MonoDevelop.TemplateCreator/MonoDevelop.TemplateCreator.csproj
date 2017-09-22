@@ -76,12 +76,22 @@
     <Compile Include="MonoDevelop.Templating.NodeBuilders\SolutionTemplateConfigFolderNodeBuilder.cs" />
     <Compile Include="MonoDevelop.Templating.NodeBuilders\NodeInfoExtensions.cs" />
     <Compile Include="MonoDevelop.Templating.Commands\SolutionTemplateConfigFolderNodeCommandHandler.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesOptionsPanel.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesOptionsViewModel.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesOptionsWidget.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesOptionsWidget.UI.cs">
+      <DependentUpon>TemplateCategoriesOptionsWidget.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ConfigurationFiles\template.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="TemplateCreator.addin.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TemplateCreator.addin.xml">
+      <Link>TemplateCreator.addin-template.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
