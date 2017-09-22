@@ -37,3 +37,5 @@ using Mono.Addins.Description;
 [assembly: AddinCategory ("IDE extensions")]
 [assembly: AddinDescription ("Create project templates for Visual Studio for Mac")]
 [assembly: AddinAuthor ("Matt Ward")]
+[assembly: AddinDependency ("::MonoDevelop.Core", "7.1")]
+[assembly: AddinDependency ("::MonoDevelop.Ide", "7.1")]

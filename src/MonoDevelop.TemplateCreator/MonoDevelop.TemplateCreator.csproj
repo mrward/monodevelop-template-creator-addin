@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\MonoDevelop.Addins.0.3.15\build\net45\MonoDevelop.Addins.props" Condition="Exists('..\packages\MonoDevelop.Addins.0.3.15\build\net45\MonoDevelop.Addins.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F9CCD990-95A0-45A7-8CDF-764694E6F448}</ProjectGuid>
-    <ProjectTypeGuids>{86F6BF2A-E449-4B3E-813B-9ACC37E5545F};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>MonoDevelop.Templating</RootNamespace>
     <AssemblyName>MonoDevelop.TemplateCreator</AssemblyName>
@@ -83,13 +82,18 @@
     <EmbeddedResource Include="Properties\Manifest.addin.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="ConfigurationFiles\template.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
+    <Reference Include="System" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\MonoDevelop.Addins.0.3.15\build\net45\MonoDevelop.Addins.targets" Condition="Exists('..\packages\MonoDevelop.Addins.0.3.15\build\net45\MonoDevelop.Addins.targets')" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
@@ -99,4 +103,5 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <Import Project="MonoDevelop.References.proj" />
 </Project>
