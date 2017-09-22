@@ -25,7 +25,12 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Mono.Addins;
 using MonoDevelop.Core;
+using MonoDevelop.Ide;
+using MonoDevelop.Ide.Templates;
 
 namespace MonoDevelop.Templating
 {
@@ -66,6 +71,32 @@ namespace MonoDevelop.Templating
 
 		public static TemplatingEngine TemplatingEngine {
 			get { return templatingEngine; }
+		}
+
+		public static IEnumerable<TemplateCategory> GetProjectTemplateCategories ()
+		{
+			try {
+				return GetProjectTemplateCategoriesByReflection ();
+			} catch (Exception ex) {
+				LoggingService.LogError ("Unable to get project template categories using reflection.", ex);
+				return IdeApp.Services.TemplatingService.GetProjectTemplateCategories ();
+			}
+		}
+
+		/// <summary>
+		/// Use reflection to get the project template categories defined by the extension point.
+		/// Using the MonoDevelop TemplatingService will only return categories that have project
+		/// templates.
+		/// </summary>
+		static IEnumerable<TemplateCategory> GetProjectTemplateCategoriesByReflection ()
+		{
+			const string path = "/MonoDevelop/Ide/ProjectTemplateCategories";
+			foreach (ExtensionNode node  in AddinManager.GetExtensionNodes (path)) {
+				Type templateCategoryCodonType = node.GetType ();
+				var flags = BindingFlags.Instance | BindingFlags.Public;
+				var method = templateCategoryCodonType.GetMethod ("ToTopLevelTemplateCategory", flags);
+				yield return (TemplateCategory)method.Invoke (node, new object [0]);
+			}
 		}
 	}
 }

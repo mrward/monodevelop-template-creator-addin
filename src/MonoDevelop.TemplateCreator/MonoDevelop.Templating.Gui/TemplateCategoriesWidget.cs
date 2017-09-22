@@ -26,7 +26,6 @@
 
 using System;
 using System.Linq;
-using MonoDevelop.Ide;
 using MonoDevelop.Ide.Templates;
 using Xwt;
 
@@ -60,7 +59,7 @@ namespace MonoDevelop.Templating.Gui
 
 		void AddTemplateCategories ()
 		{
-			foreach (TemplateCategory category in IdeApp.Services.TemplatingService.GetProjectTemplateCategories ()) {
+			foreach (TemplateCategory category in TemplatingServices.GetProjectTemplateCategories ()) {
 				AddTemplateCategory (null, null, category);
 			}
 		}
