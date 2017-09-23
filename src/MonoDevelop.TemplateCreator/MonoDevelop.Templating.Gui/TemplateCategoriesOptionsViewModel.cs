@@ -36,6 +36,7 @@ namespace MonoDevelop.Templating.Gui
 
 		public void Save ()
 		{
+			TemplateCreatorAddinXmlFile.UpdateTemplateCategories (categories);
 		}
 
 		public bool ValidateChanges ()
