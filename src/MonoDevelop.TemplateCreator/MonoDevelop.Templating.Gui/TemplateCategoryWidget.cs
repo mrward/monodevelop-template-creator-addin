@@ -69,9 +69,9 @@ namespace MonoDevelop.Templating.Gui
 		{
 			this.category = category;
 
-			IdTextEntry.Text = category.Category.Id;
+			IdTextEntry.Text = category.Id;
 
-			UpdateNameWithRaisingChangedEvent (category.Category.Name);
+			UpdateNameWithRaisingChangedEvent (category.Name);
 
 			Sensitive = true;
 		}
