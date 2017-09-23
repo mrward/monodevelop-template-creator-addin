@@ -44,6 +44,12 @@ namespace MonoDevelop.Templating.Gui
 		{
 			var mainVBox = new VBox ();
 
+			var topLabel = new Label ();
+			topLabel.Text = GettextCatalog.GetString ("Category changes will take effect the next time you start {0}.", BrandingService.ApplicationName);
+			topLabel.TextAlignment = Alignment.Start;
+			topLabel.Margin = 5;
+			mainVBox.PackStart (topLabel);
+
 			var mainHBox = new HBox ();
 			mainVBox.PackStart (mainHBox, true, true);
 
