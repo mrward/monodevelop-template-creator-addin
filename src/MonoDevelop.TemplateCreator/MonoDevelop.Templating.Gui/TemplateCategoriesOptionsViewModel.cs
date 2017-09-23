@@ -24,7 +24,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using MonoDevelop.Ide.Templates;
 
 namespace MonoDevelop.Templating.Gui
@@ -33,6 +35,11 @@ namespace MonoDevelop.Templating.Gui
 	{
 		List<TemplateCategoryViewModel> categories = new List<TemplateCategoryViewModel> ();
 		TemplateCategoryViewModel selectedCategory;
+
+		public void Load ()
+		{
+			categories = TemplateCreatorAddinXmlFile.ReadTemplateCategories ().ToList ();
+		}
 
 		public void Save ()
 		{
@@ -58,6 +65,11 @@ namespace MonoDevelop.Templating.Gui
 			categories.Add (viewModel);
 
 			return viewModel;
+		}
+
+		public IEnumerable<TemplateCategoryViewModel> GetCategories ()
+		{
+			return categories;
 		}
 
 		public TemplateCategoryViewModel AddCategory ()

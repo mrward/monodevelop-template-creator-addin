@@ -39,6 +39,8 @@ namespace MonoDevelop.Templating.Gui
 
 			Build ();
 
+			AddCategories ();
+
 			addTopLevelCategoryButton.Clicked += AddTopLevelCategoryButtonClicked;
 			addCategoryButton.Clicked += AddCategoryButtonClicked;
 			removeCategoryButton.Clicked += RemoveCategoryButtonClicked;
@@ -48,6 +50,11 @@ namespace MonoDevelop.Templating.Gui
 			topLevelCategoryWidget.NameChanged += TemplateCategoryNameChanged;
 			secondLevelCategoryWidget.NameChanged += TemplateCategoryNameChanged;
 			thirdLevelCategoryWidget.NameChanged += TemplateCategoryNameChanged;
+		}
+
+		void AddCategories ()
+		{
+			templateCategoriesWidget.AddTemplateCategories (viewModel.GetCategories ());
 		}
 
 		void AddTopLevelCategoryButtonClicked (object sender, EventArgs e)

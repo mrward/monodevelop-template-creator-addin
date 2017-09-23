@@ -46,6 +46,7 @@ namespace MonoDevelop.Templating.Gui
 		public override Control CreatePanelWidget ()
 		{
 			viewModel = new TemplateCategoriesOptionsViewModel ();
+			viewModel.Load ();
 			var widget = new TemplateCategoriesOptionsWidget (viewModel);
 			return widget.ToGtkWidget ();
 		}

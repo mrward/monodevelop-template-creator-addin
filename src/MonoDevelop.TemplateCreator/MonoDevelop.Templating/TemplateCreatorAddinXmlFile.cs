@@ -26,6 +26,8 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
+using MonoDevelop.Ide.Templates;
 using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating
@@ -52,6 +54,31 @@ namespace MonoDevelop.Templating
 			addinXml = addinXml.Replace (PlaceHolderText, text);
 
 			File.WriteAllText (addinXmlFileName, addinXml);
+		}
+
+		public static IEnumerable<TemplateCategoryViewModel> ReadTemplateCategories ()
+		{
+			var doc = new XmlDocument ();
+			doc.Load (addinXmlFileName);
+
+			foreach (XmlElement node in doc.SelectNodes ("//Extension[@path='/MonoDevelop/Ide/ProjectTemplateCategories']/Category")) {
+				TemplateCategory category = CreateTemplateCategory (node);
+				yield return new TemplateCategoryViewModel (null, category);
+			}
+		}
+
+		static TemplateCategory CreateTemplateCategory (XmlElement node)
+		{
+			var category = new TemplateCategory (
+				node.GetAttribute ("id"),
+				node.GetAttribute ("name"),
+				null);
+
+			foreach (XmlElement childNode in node.SelectNodes ("./Category")) {
+				category.AddCategory (CreateTemplateCategory (childNode));
+			}
+
+			return category;
 		}
 	}
 }
