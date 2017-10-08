@@ -41,6 +41,7 @@ namespace MonoDevelop.Templating
 
 			Category = info.GetCategory ("other/net/general");
 			Description = info.Description;
+			GroupId = info.GroupIdentity;
 			Language = info.GetLanguage ();
 		}
 
