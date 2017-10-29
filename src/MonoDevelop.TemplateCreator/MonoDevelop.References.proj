@@ -2,6 +2,7 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MDBinDir Condition=" '$(MDBinDir)' == '' ">..\..\..\..\monodevelop\main\build\bin</MDBinDir>
+    <LibDir>..\..\lib</LibDir>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Addins">
@@ -16,30 +17,32 @@
       <Private>False</Private>
       <HintPath>$(MDBinDir)\MonoDevelop.Ide.dll</HintPath>
     </Reference>
+    <!--
     <Reference Include="Microsoft.TemplateEngine.Abstractions">
       <Private>False</Private>
-      <HintPath>$(MDBinDir)\Microsoft.TemplateEngine.Abstractions.dll</HintPath>
+      <HintPath>$(LibDir)\Microsoft.TemplateEngine.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.TemplateEngine.Core.Contracts">
       <Private>False</Private>
-      <HintPath>$(MDBinDir)\Microsoft.TemplateEngine.Core.Contracts.dll</HintPath>
+      <HintPath>$(LibDir)\Microsoft.TemplateEngine.Core.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.TemplateEngine.Core">
       <Private>False</Private>
-      <HintPath>$(MDBinDir)\Microsoft.TemplateEngine.Core.dll</HintPath>
+      <HintPath>$(LibDir)\Microsoft.TemplateEngine.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.TemplateEngine.Edge">
       <Private>False</Private>
-      <HintPath>$(MDBinDir)\Microsoft.TemplateEngine.Edge.dll</HintPath>
+      <HintPath>$(LibDir)\Microsoft.TemplateEngine.Edge.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.TemplateEngine.Orchestrator.RunnableProjects">
       <Private>False</Private>
-      <HintPath>$(MDBinDir)\Microsoft.TemplateEngine.Orchestrator.RunnableProjects.dll</HintPath>
+      <HintPath>$(LibDir)\Microsoft.TemplateEngine.Orchestrator.RunnableProjects.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.TemplateEngine.Utils">
       <Private>False</Private>
-      <HintPath>$(MDBinDir)\Microsoft.TemplateEngine.Utils.dll</HintPath>
+      <HintPath>$(LibDir)\Microsoft.TemplateEngine.Utils.dll</HintPath>
     </Reference>
+    -->
     <Reference Include="Newtonsoft.Json">
       <Private>False</Private>
       <HintPath>$(MDBinDir)\Newtonsoft.Json.dll</HintPath>
