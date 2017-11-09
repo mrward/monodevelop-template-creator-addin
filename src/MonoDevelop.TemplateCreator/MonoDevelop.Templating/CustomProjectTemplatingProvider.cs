@@ -24,11 +24,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using MonoDevelop.Core;
 using MonoDevelop.Ide.Projects;
 using MonoDevelop.Ide.Templates;
 using MonoDevelop.Projects;
+using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating
 {
@@ -41,10 +45,15 @@ namespace MonoDevelop.Templating
 
 		public IEnumerable<SolutionTemplate> GetTemplates ()
 		{
-			var templateEngine = TemplatingServices.TemplatingEngine;
-			templateEngine.LoadTemplates ();
+			try {
+				var templateEngine = TemplatingServices.TemplatingEngine;
+				templateEngine.LoadTemplates ();
 
-			return templateEngine.Templates;
+				return templateEngine.Templates;
+			} catch (Exception ex) {
+				TemplatingServices.LogError ("Unable to load templates.", ex);
+			}
+			return Enumerable.Empty <SolutionTemplate> ();
 		}
 
 		public Task<ProcessedTemplateResult> ProcessTemplate (

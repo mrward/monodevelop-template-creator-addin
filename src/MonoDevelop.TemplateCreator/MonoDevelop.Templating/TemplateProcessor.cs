@@ -42,6 +42,7 @@ using MonoDevelop.Ide.Projects;
 using MonoDevelop.Ide.Templates;
 using MonoDevelop.Projects;
 using MonoDevelop.Projects.Policies;
+using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating
 {
@@ -185,7 +186,7 @@ namespace MonoDevelop.Templating
 					if (formatted != null)
 						TextFileUtility.WriteText (file, formatted, content.Encoding);
 				} catch (Exception ex) {
-					LoggingService.LogError ("File formatting failed", ex);
+					TemplatingServices.LogError ("File formatting failed", ex);
 				}
 			}
 		}

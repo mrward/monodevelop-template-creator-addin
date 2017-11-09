@@ -80,7 +80,18 @@
 				class="MonoDevelop.Templating.Gui.TemplateFoldersOptionsPanel" />
 		</Section>
 	</Extension>
-	
+
+	<Extension path="/MonoDevelop/Ide/Pads">
+		<Pad
+			id="MonoDevelop.Templating.OutputPad"
+			defaultLayout="*"
+			defaultPlacement="Center Bottom"
+			defaultStatus="AutoHide"
+			icon="md-console"
+			class="MonoDevelop.Templating.Gui.TemplatingOutputPad"
+			_label="Templating Log" />
+	</Extension>
+
 	<Extension path="/MonoDevelop/Ide/ProjectTemplatingProviders">
 		<Class
 			id="MonoDevelop.CustomProjectTemplateProvider"

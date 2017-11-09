@@ -31,6 +31,7 @@ using Mono.Addins;
 using MonoDevelop.Core;
 using MonoDevelop.Ide;
 using MonoDevelop.Ide.Templates;
+using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating
 {
@@ -57,7 +58,7 @@ namespace MonoDevelop.Templating
 			try {
 				templatingEngine.ReloadTemplates ();
 			} catch (Exception ex) {
-				LoggingService.LogError ("Unable to reset cache.", ex);
+				TemplatingServices.LogError ("Unable to reset template cache.", ex);
 			}
 		}
 
@@ -78,7 +79,7 @@ namespace MonoDevelop.Templating
 			try {
 				return GetProjectTemplateCategoriesByReflection ();
 			} catch (Exception ex) {
-				LoggingService.LogError ("Unable to get project template categories using reflection.", ex);
+				LogError ("Unable to get project template categories using reflection.", ex);
 				return IdeApp.Services.TemplatingService.GetProjectTemplateCategories ();
 			}
 		}
@@ -97,6 +98,17 @@ namespace MonoDevelop.Templating
 				var method = templateCategoryCodonType.GetMethod ("ToTopLevelTemplateCategory", flags);
 				yield return (TemplateCategory)method.Invoke (node, new object [0]);
 			}
+		}
+
+		public static void LogError (string message, Exception ex)
+		{
+			LoggingService.LogError (message, ex);
+			TemplatingOutputPad.WriteError (message + " " + ex);
+		}
+
+		public static void LogInfo (string message)
+		{
+			TemplatingOutputPad.WriteText (message);
 		}
 	}
 }

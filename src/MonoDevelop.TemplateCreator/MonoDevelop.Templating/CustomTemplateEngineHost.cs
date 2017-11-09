@@ -30,6 +30,7 @@ using Microsoft.TemplateEngine.Edge;
 using Microsoft.TemplateEngine.Orchestrator.RunnableProjects;
 using Microsoft.TemplateEngine.Orchestrator.RunnableProjects.Config;
 using Microsoft.TemplateEngine.Utils;
+using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating
 {
@@ -50,6 +51,11 @@ namespace MonoDevelop.Templating
 		public CustomTemplateEngineHost ()
 			: base (hostIdentifier, hostVersion, CultureInfo.CurrentCulture.Name, preferences, builtIns)
 		{
+		}
+
+		public override void LogMessage (string message)
+		{
+			TemplatingServices.LogInfo (message);
 		}
 	}
 }

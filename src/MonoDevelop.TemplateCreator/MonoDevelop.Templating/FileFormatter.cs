@@ -32,6 +32,7 @@ using MonoDevelop.Core.Text;
 using MonoDevelop.Ide;
 using MonoDevelop.Ide.CodeFormatting;
 using MonoDevelop.Projects.Policies;
+using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating
 {
@@ -50,7 +51,7 @@ namespace MonoDevelop.Templating
 					TextFileUtility.WriteText (fileName, formatted, Encoding.UTF8);
 				}
 			} catch (Exception ex) {
-				LoggingService.LogError ("File formatting failed", ex);
+				TemplatingServices.LogError ("File formatting failed", ex);
 			}
 		}
 

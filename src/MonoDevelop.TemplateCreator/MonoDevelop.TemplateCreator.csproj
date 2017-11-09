@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="MonoDevelop.Templating\ProjectTemplateCategoriesXmlGenerator.cs" />
     <Compile Include="MonoDevelop.Templating\TemplateCreatorAddinXmlFile.cs" />
+    <Compile Include="MonoDevelop.Templating.Gui\TemplatingOutputPad.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ConfigurationFiles\template.json">
