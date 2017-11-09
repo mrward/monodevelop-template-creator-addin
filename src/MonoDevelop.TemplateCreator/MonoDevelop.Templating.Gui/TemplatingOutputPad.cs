@@ -70,6 +70,11 @@ namespace MonoDevelop.Templating.Gui
 
 		void ButtonClearClick (object sender, EventArgs e)
 		{
+			Clear ();
+		}
+
+		public static void Clear ()
+		{
 			logView.Clear ();
 		}
 

@@ -56,6 +56,7 @@ namespace MonoDevelop.Templating
 		static void TemplateFoldersChanged (object sender, EventArgs e)
 		{
 			try {
+				TemplatingOutputPad.Clear ();
 				templatingEngine.ReloadTemplates ();
 			} catch (Exception ex) {
 				TemplatingServices.LogError ("Unable to reset template cache.", ex);
