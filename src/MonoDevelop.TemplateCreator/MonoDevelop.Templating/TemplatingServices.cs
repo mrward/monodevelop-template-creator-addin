@@ -59,7 +59,7 @@ namespace MonoDevelop.Templating
 				TemplatingOutputPad.Clear ();
 				templatingEngine.ReloadTemplates ();
 			} catch (Exception ex) {
-				TemplatingServices.LogError ("Unable to reset template cache.", ex);
+				LogError ("Unable to reset template cache.", ex);
 			}
 		}
 

@@ -26,24 +26,34 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using MonoDevelop.Core;
 using MonoDevelop.Ide.Projects;
 using MonoDevelop.Ide.Templates;
 using MonoDevelop.Projects;
-using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating
 {
 	class CustomProjectTemplatingProvider : IProjectTemplatingProvider
 	{
+		SolutionTemplate[] cachedTemplates;
+		DateTime cacheExpiryDate;
+		TimeSpan cacheExpiryTimeSpan = TimeSpan.FromSeconds (1);
+
 		public bool CanProcessTemplate (SolutionTemplate template)
 		{
 			return template is CustomSolutionTemplate;
 		}
 
 		public IEnumerable<SolutionTemplate> GetTemplates ()
+		{
+			if (!UseCachedTemplates ()) {
+				return LoadTemplates ();
+			}
+
+			return cachedTemplates;
+		}
+
+		IEnumerable<SolutionTemplate> LoadTemplates ()
 		{
 			try {
 				var templateEngine = TemplatingServices.TemplatingEngine;
@@ -52,8 +62,10 @@ namespace MonoDevelop.Templating
 				return templateEngine.Templates;
 			} catch (Exception ex) {
 				TemplatingServices.LogError ("Unable to load templates.", ex);
+				cachedTemplates = new SolutionTemplate [0];
+				cacheExpiryDate = DateTime.UtcNow.Add (cacheExpiryTimeSpan);
 			}
-			return Enumerable.Empty <SolutionTemplate> ();
+			return cachedTemplates;
 		}
 
 		public Task<ProcessedTemplateResult> ProcessTemplate (
@@ -67,6 +79,26 @@ namespace MonoDevelop.Templating
 				parentFolder);
 
 			return templateProcessor.ProcessTemplate ();
+		}
+
+		/// <summary>
+		/// Use cached templates if they were used in the last second. This prevents the
+		/// same template load exception occurring when the new project dialog is opened
+		/// since it calls GetTemplates multiple times.
+		/// </summary>
+		bool UseCachedTemplates ()
+		{
+			if (cachedTemplates == null) {
+				return false;
+			}
+
+			var currentDate = DateTime.UtcNow;
+			if (currentDate > cacheExpiryDate) {
+				cachedTemplates = null;
+				return false;
+			}
+
+			return true;
 		}
 	}
 }
