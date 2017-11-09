@@ -17,8 +17,8 @@
 	</Runtime>
 
 	<Dependencies>
-		<Addin id="::MonoDevelop.Core" version="7.1"/>
-		<Addin id="::MonoDevelop.Ide" version="7.1"/>
+		<Addin id="::MonoDevelop.Core" version="7.0"/>
+		<Addin id="::MonoDevelop.Ide" version="7.0"/>
 	</Dependencies>
 
 	<Extension path="/MonoDevelop/Ide/Commands">
