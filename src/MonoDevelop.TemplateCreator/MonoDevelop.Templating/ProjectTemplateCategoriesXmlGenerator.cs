@@ -53,6 +53,7 @@ namespace MonoDevelop.Templating
 			var builder = new StringBuilder ();
 
 			var settings = new XmlWriterSettings {
+				ConformanceLevel = ConformanceLevel.Fragment,
 				Indent = true,
 				IndentChars = "\t",
 				OmitXmlDeclaration = true

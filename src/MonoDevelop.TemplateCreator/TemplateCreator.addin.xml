@@ -99,6 +99,6 @@
 	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/ProjectTemplateCategories">
-		<!--CUSTOM-PROJECT-TEMPLATE-CATEGORIES-->
+<!--CUSTOM-PROJECT-TEMPLATE-CATEGORIES-->
 	</Extension>
 </Addin>
