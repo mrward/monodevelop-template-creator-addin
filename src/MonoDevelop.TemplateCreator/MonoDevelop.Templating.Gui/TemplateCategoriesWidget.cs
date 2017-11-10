@@ -27,7 +27,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MonoDevelop.Ide.Templates;
 using Xwt;
 
 namespace MonoDevelop.Templating.Gui
@@ -55,17 +54,6 @@ namespace MonoDevelop.Templating.Gui
 
 		public event EventHandler SelectedCategoryChanged;
 
-		public void AddTemplateCategories (IEnumerable<TemplateCategory> categories)
-		{
-			AddTemplateCategories (GetCategoryViewModels (categories));
-		}
-
-		IEnumerable<TemplateCategoryViewModel> GetCategoryViewModels (
-			IEnumerable<TemplateCategory> categories)
-		{
-			return categories.Select (category => new TemplateCategoryViewModel (null, category));
-		}
-
 		public void AddTemplateCategories (IEnumerable<TemplateCategoryViewModel> categories)
 		{
 			foreach (TemplateCategoryViewModel category in categories) {
@@ -80,7 +68,7 @@ namespace MonoDevelop.Templating.Gui
 			TemplateCategoryViewModel categoryViewModel)
 		{
 			TreeNavigator node = treeStore.AddNode (position);
-			node.SetValue (nameColumn, categoryViewModel.Name);
+			node.SetValue (nameColumn, categoryViewModel.GetNameWithIsNewMessage ());
 			node.SetValue (categoryColumn, categoryViewModel);
 
 			foreach (TemplateCategoryViewModel childCategory in categoryViewModel.GetChildCategories ()) {

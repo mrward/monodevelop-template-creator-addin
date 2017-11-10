@@ -26,6 +26,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using MonoDevelop.Ide.Templates;
 using MonoDevelop.Templating.Gui;
@@ -36,6 +37,7 @@ namespace MonoDevelop.Templating
 	{
 		static readonly string addinXmlTemplateFileName;
 		static readonly string addinXmlFileName;
+		static List<TemplateCategoryViewModel> originalCategories;
 
 		const string PlaceHolderText = "<!--CUSTOM-PROJECT-TEMPLATE-CATEGORIES-->";
 
@@ -60,7 +62,24 @@ namespace MonoDevelop.Templating
 			IsModified = true;
 		}
 
+		public static IEnumerable<TemplateCategoryViewModel> GetOriginalTemplateCategories ()
+		{
+			if (originalCategories != null) {
+				return originalCategories;
+			}
+			return ReadTemplateCategories ();
+		}
+
 		public static IEnumerable<TemplateCategoryViewModel> ReadTemplateCategories ()
+		{
+			var categories = ReadTemplateCategoriesInternal ().ToList ();
+			if (originalCategories == null) {
+				originalCategories = categories;
+			}
+			return categories;
+		}
+
+		static IEnumerable<TemplateCategoryViewModel> ReadTemplateCategoriesInternal ()
 		{
 			var doc = new XmlDocument ();
 			doc.Load (addinXmlFileName);

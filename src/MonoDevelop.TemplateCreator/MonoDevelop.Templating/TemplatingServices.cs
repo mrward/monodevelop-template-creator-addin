@@ -76,15 +76,16 @@ namespace MonoDevelop.Templating
 			get { return templatingEngine; }
 		}
 
-		public static IEnumerable<TemplateCategory> GetProjectTemplateCategories ()
+		public static IEnumerable<TemplateCategoryViewModel> GetProjectTemplateCategories ()
 		{
 			try {
-				return GetProjectTemplateCategoriesByReflection ()
+				return GetProjectTemplateCategoriesByReflection (TemplateCreatorAddinXmlFile.IsModified)
 					.AppendCustomCategories ();
 			} catch (Exception ex) {
 				LogError ("Unable to get project template categories using reflection.", ex);
 
 				return IdeApp.Services.TemplatingService.GetProjectTemplateCategories ()
+					.Select (category => new TemplateCategoryViewModel (null, category))
 					.AppendCustomCategories ();
 			}
 		}
@@ -94,11 +95,12 @@ namespace MonoDevelop.Templating
 		/// Using the MonoDevelop TemplatingService will only return categories that have project
 		/// templates.
 		/// </summary>
-		static IEnumerable<TemplateCategory> GetProjectTemplateCategoriesByReflection ()
+		static IEnumerable<TemplateCategoryViewModel> GetProjectTemplateCategoriesByReflection (
+			bool excludeTemplateCreatorCategories = false)
 		{
 			const string path = "/MonoDevelop/Ide/ProjectTemplateCategories";
 			foreach (ExtensionNode node in AddinManager.GetExtensionNodes (path)) {
-				if (TemplateCreatorAddinXmlFile.IsModified &&
+				if (excludeTemplateCreatorCategories &&
 					node.Addin.Id == "MonoDevelop.TemplateCreator") {
 					// Ignore. These will be added from the current custom category list.
 					continue;
@@ -107,7 +109,8 @@ namespace MonoDevelop.Templating
 				Type templateCategoryCodonType = node.GetType ();
 				var flags = BindingFlags.Instance | BindingFlags.Public;
 				var method = templateCategoryCodonType.GetMethod ("ToTopLevelTemplateCategory", flags);
-				yield return (TemplateCategory)method.Invoke (node, new object [0]);
+				var category = (TemplateCategory)method.Invoke (node, new object [0]);
+				yield return new TemplateCategoryViewModel (null, category);
 			}
 		}
 
@@ -122,7 +125,7 @@ namespace MonoDevelop.Templating
 			TemplatingOutputPad.WriteText (message);
 		}
 
-		static IEnumerable<TemplateCategory> AppendCustomCategories (this IEnumerable<TemplateCategory> categories)
+		static IEnumerable<TemplateCategoryViewModel> AppendCustomCategories (this IEnumerable<TemplateCategoryViewModel> categories)
 		{
 			if (!TemplateCreatorAddinXmlFile.IsModified) {
 				return categories;
@@ -131,10 +134,59 @@ namespace MonoDevelop.Templating
 			var newCategories = TemplateCreatorAddinXmlFile.ReadTemplateCategories ()
 				.ToList ();
 
+			var originalCategories = TemplateCreatorAddinXmlFile.GetOriginalTemplateCategories ()
+				.ToList ();
+
+			foreach (var newCategory in newCategories) {
+				MarkNewCategories (newCategory, originalCategories);
+			}
+
 			var updatedCategories = categories.ToList ();
-			updatedCategories.AddRange (newCategories.Select (newCategory => newCategory.Category));
+			updatedCategories.AddRange (newCategories);
 
 			return updatedCategories;
+		}
+
+		static void MarkNewCategories (TemplateCategoryViewModel category, IEnumerable<TemplateCategoryViewModel> categories)
+		{
+			var existingTopLevelCategory = category.FindExistingCategory (categories);
+			if (existingTopLevelCategory != null) {
+				foreach (var secondLevelCategory in category.GetChildCategories ()) {
+					var existingSecondLevelCategory = secondLevelCategory.FindExistingCategory (
+						existingTopLevelCategory.Categories);
+					if (existingSecondLevelCategory != null) {
+						foreach (var newThirdLevelCategory in secondLevelCategory.GetChildCategories ()) {
+							var existingThirdLevelCategory = newThirdLevelCategory.FindExistingCategory (
+								existingSecondLevelCategory.Categories);
+							if (existingThirdLevelCategory != null) {
+								// Category exists.
+							} else {
+								newThirdLevelCategory.IsNew = true;
+							}
+						}
+					} else {
+						secondLevelCategory.IsNew = true;
+					}
+				}
+			} else {
+				category.IsNew = true;
+			}
+		}
+
+		static TemplateCategory FindExistingCategory (this TemplateCategoryViewModel category, IEnumerable<TemplateCategory> categories)
+		{
+			return categories.FirstOrDefault (existingCategory => IsMatch (category.Category, existingCategory));
+		}
+
+		static TemplateCategory FindExistingCategory (this TemplateCategoryViewModel category, IEnumerable<TemplateCategoryViewModel> categories)
+		{
+			var matchedCategory = categories.FirstOrDefault (existingCategory => IsMatch (category.Category, existingCategory.Category));
+			return matchedCategory?.Category;
+		}
+
+		static bool IsMatch (TemplateCategory category1, TemplateCategory category2)
+		{
+			return (category1.Id == category2.Id) && (category1.Name == category2.Name);
 		}
 	}
 }

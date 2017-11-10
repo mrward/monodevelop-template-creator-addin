@@ -26,6 +26,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using MonoDevelop.Core;
 using MonoDevelop.Ide.Templates;
 
 namespace MonoDevelop.Templating.Gui
@@ -54,6 +55,7 @@ namespace MonoDevelop.Templating.Gui
 		public TemplateCategory Category { get; private set; }
 		public bool IsBottomLevel { get; private set; }
 		public bool IsTopLevel { get; private set; }
+		public bool IsNew { get; set; }
 
 		public string GetCategoryIdPath ()
 		{
@@ -127,6 +129,16 @@ namespace MonoDevelop.Templating.Gui
 			}
 
 			return childCategories;
+		}
+
+		public string GetNameWithIsNewMessage ()
+		{
+			if (IsNew) {
+				string isNewMessage = GettextCatalog.GetString ("New category - requires restart");
+				return string.Format ("{0} ({1})", Name, isNewMessage);
+			}
+
+			return Name;
 		}
 	}
 }
