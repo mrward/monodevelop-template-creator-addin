@@ -53,7 +53,7 @@ namespace MonoDevelop.Templating.Gui
 
 		public TemplateCategoryViewModel AddTopLevelCategory ()
 		{
-			var topLevelCategory = new TemplateCategory ("top", "Top Level", null);
+			var topLevelCategory = CreateUniqueCategory ("top", "Top Level", categories);
 			var secondLevelCategory = new TemplateCategory ("second", "Second Level", null);
 			var thirdLevelCategory = new TemplateCategory ("third", "Third Level", null);
 
@@ -67,6 +67,34 @@ namespace MonoDevelop.Templating.Gui
 			return viewModel;
 		}
 
+		static TemplateCategory CreateUniqueCategory (string id, string name, IEnumerable<TemplateCategoryViewModel> categories)
+		{
+			int? count = GetUniqueTemplateIdCount (id, categories);
+			if (count.HasValue) {
+				id = id + count.ToString ();
+				name = name + count.ToString ();
+			}
+
+			return new TemplateCategory (id, name, null);
+		}
+
+		static int? GetUniqueTemplateIdCount (string templateId, IEnumerable<TemplateCategoryViewModel> categories)
+		{
+			var existingCategory = categories.FirstOrDefault (category => category.Id == templateId);
+			if (existingCategory == null) {
+				return null;
+			}
+
+			int count = 1;
+			do {
+				count++;
+				string newTemplateId = templateId + count.ToString ();
+				existingCategory = categories.FirstOrDefault (category => category.Id == newTemplateId);
+			} while (existingCategory != null);
+
+			return count;
+		}
+
 		public IEnumerable<TemplateCategoryViewModel> GetCategories ()
 		{
 			return categories;
@@ -74,7 +102,11 @@ namespace MonoDevelop.Templating.Gui
 
 		public TemplateCategoryViewModel AddCategory ()
 		{
-			var category = new TemplateCategory ("categoryid", "New Category", null);
+			var category = CreateUniqueCategory (
+				"categoryid",
+				"New Category",
+				selectedCategory.GetChildCategories ());
+
 			return selectedCategory.AddCategory (category);
 		}
 
