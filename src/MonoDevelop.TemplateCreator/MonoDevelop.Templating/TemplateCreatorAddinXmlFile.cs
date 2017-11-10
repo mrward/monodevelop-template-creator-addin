@@ -46,6 +46,8 @@ namespace MonoDevelop.Templating
 			addinXmlFileName = Path.Combine (directory, "TemplateCreator.addin.xml");
 		}
 
+		public static bool IsModified { get; private set; }
+
 		public static void UpdateTemplateCategories (IEnumerable<TemplateCategoryViewModel> categories)
 		{
 			string text = ProjectTemplateCategoriesXmlGenerator.Generate (categories);
@@ -54,6 +56,8 @@ namespace MonoDevelop.Templating
 			addinXml = addinXml.Replace (PlaceHolderText, text);
 
 			File.WriteAllText (addinXmlFileName, addinXml);
+
+			IsModified = true;
 		}
 
 		public static IEnumerable<TemplateCategoryViewModel> ReadTemplateCategories ()

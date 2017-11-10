@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Mono.Addins;
 using MonoDevelop.Core;
@@ -78,10 +79,13 @@ namespace MonoDevelop.Templating
 		public static IEnumerable<TemplateCategory> GetProjectTemplateCategories ()
 		{
 			try {
-				return GetProjectTemplateCategoriesByReflection ();
+				return GetProjectTemplateCategoriesByReflection ()
+					.AppendCustomCategories ();
 			} catch (Exception ex) {
 				LogError ("Unable to get project template categories using reflection.", ex);
-				return IdeApp.Services.TemplatingService.GetProjectTemplateCategories ();
+
+				return IdeApp.Services.TemplatingService.GetProjectTemplateCategories ()
+					.AppendCustomCategories ();
 			}
 		}
 
@@ -93,7 +97,13 @@ namespace MonoDevelop.Templating
 		static IEnumerable<TemplateCategory> GetProjectTemplateCategoriesByReflection ()
 		{
 			const string path = "/MonoDevelop/Ide/ProjectTemplateCategories";
-			foreach (ExtensionNode node  in AddinManager.GetExtensionNodes (path)) {
+			foreach (ExtensionNode node in AddinManager.GetExtensionNodes (path)) {
+				if (TemplateCreatorAddinXmlFile.IsModified &&
+					node.Addin.Id == "MonoDevelop.TemplateCreator") {
+					// Ignore. These will be added from the current custom category list.
+					continue;
+				}
+
 				Type templateCategoryCodonType = node.GetType ();
 				var flags = BindingFlags.Instance | BindingFlags.Public;
 				var method = templateCategoryCodonType.GetMethod ("ToTopLevelTemplateCategory", flags);
@@ -110,6 +120,21 @@ namespace MonoDevelop.Templating
 		public static void LogInfo (string message)
 		{
 			TemplatingOutputPad.WriteText (message);
+		}
+
+		static IEnumerable<TemplateCategory> AppendCustomCategories (this IEnumerable<TemplateCategory> categories)
+		{
+			if (!TemplateCreatorAddinXmlFile.IsModified) {
+				return categories;
+			}
+
+			var newCategories = TemplateCreatorAddinXmlFile.ReadTemplateCategories ()
+				.ToList ();
+
+			var updatedCategories = categories.ToList ();
+			updatedCategories.AddRange (newCategories.Select (newCategory => newCategory.Category));
+
+			return updatedCategories;
 		}
 	}
 }
