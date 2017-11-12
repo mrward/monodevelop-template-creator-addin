@@ -47,6 +47,7 @@ namespace MonoDevelop.Templating.Gui
 			identityTextEntry.TextEntry.Text = viewModel.Identity;
 			shortNameTextEntry.TextEntry.Text = viewModel.ShortName;
 			categoryTextEntry.TextEntry.Text = viewModel.Category;
+			descriptionTextEntry.TextEntry.Text = viewModel.Description;
 
 			authorTextEntry.TextEntry.Changed += AuthorTextEntryChanged;
 			defaultProjectNameTextEntry.TextEntry.Changed += DefaultProjectNameTextEntryChanged;
@@ -55,6 +56,7 @@ namespace MonoDevelop.Templating.Gui
 			identityTextEntry.TextEntry.Changed += IdentityTextEntryChanged;
 			shortNameTextEntry.TextEntry.Changed += ShortNameTextEntryChanged;
 			categoryTextEntry.TextEntry.Changed += CategoryTextEntryChanged;
+			descriptionTextEntry.TextEntry.Changed += DescriptionTextChanged;
 
 			selectCategoryButton.Clicked += SelectCategoryButtonClicked;
 		}
@@ -98,6 +100,11 @@ namespace MonoDevelop.Templating.Gui
 		void CategoryTextEntryChanged (object sender, EventArgs e)
 		{
 			viewModel.Category = categoryTextEntry.TextEntry.Text;
+		}
+
+		void DescriptionTextChanged (object sender, EventArgs e)
+		{
+			viewModel.Description = descriptionTextEntry.TextEntry.Text;
 		}
 
 		void SelectCategoryButtonClicked (object sender, EventArgs e)

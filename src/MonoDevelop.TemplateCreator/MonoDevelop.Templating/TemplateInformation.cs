@@ -68,6 +68,7 @@ namespace MonoDevelop.Templating
 		public string Language { get; set; }
 		public string CategoryTagName { get; set; }
 		public string Category { get; set; }
+		public string Description { get; set; }
 		public string[] ProjectFilePrimaryOutputs { get; set; }
 		public string[] ProjectGuids { get; set; }
 
@@ -78,6 +79,7 @@ namespace MonoDevelop.Templating
 			DisplayName = project.Name;
 			Language = project.LanguageName;
 			ShortName = project.Name;
+			Description = string.Empty;
 
 			Category = "other/net/general";
 			CategoryTagName = TemplateCategoryTagNameProvider.DefaultCategoryTagName;
