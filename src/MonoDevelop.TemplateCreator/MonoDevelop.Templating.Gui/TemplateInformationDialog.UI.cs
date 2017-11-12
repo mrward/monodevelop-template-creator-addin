@@ -67,17 +67,20 @@ namespace MonoDevelop.Templating.Gui
 
 			displayNameTextEntry = CreateTemplateTextEntry (
 				mainVBox,
-				GettextCatalog.GetString ("Display Name:"));
+				GettextCatalog.GetString ("Display Name:"),
+				GettextCatalog.GetString ("Name of template displayed in the New Project dialog."));
 			allLabels.Add (displayNameTextEntry.Label);
 
 			descriptionTextEntry = CreateTemplateTextEntry (
 				mainVBox,
-				GettextCatalog.GetString ("Description:"));
+				GettextCatalog.GetString ("Description:"),
+				GettextCatalog.GetString ("Template description displayed in the New Project dialog."));
 			allLabels.Add (descriptionTextEntry.Label);
 
 			categoryTextEntry = CreateTemplateTextEntry (
 				mainVBox,
-				GettextCatalog.GetString ("Category:"));
+				GettextCatalog.GetString ("Category:"),
+				GettextCatalog.GetString ("Defines where the project template will be displayed in the New Project dialog."));
 			allLabels.Add (categoryTextEntry.Label);
 
 			selectCategoryButton = new Button ();
@@ -86,22 +89,26 @@ namespace MonoDevelop.Templating.Gui
 
 			shortNameTextEntry = CreateTemplateTextEntry (
 				mainVBox,
-				GettextCatalog.GetString ("Short Name:"));
+				GettextCatalog.GetString ("Short Name:"),
+				GettextCatalog.GetString ("Name that can be used to reference this template when using the .NET Core command line. Not used in {0}.", BrandingService.ApplicationName));
 			allLabels.Add (shortNameTextEntry.Label);
 
 			defaultProjectNameTextEntry = CreateTemplateTextEntry (
 				mainVBox,
-				GettextCatalog.GetString ("Default Project Name:"));
+					GettextCatalog.GetString ("Default Project Name:"),
+					GettextCatalog.GetString ("Default project name when using the .NET Core command line. Not used in {0}.", BrandingService.ApplicationName));
 			allLabels.Add (defaultProjectNameTextEntry.Label);
 
 			identityTextEntry = CreateTemplateTextEntry (
 				mainVBox,
-				GettextCatalog.GetString ("Identity:"));
+				GettextCatalog.GetString ("Identity:"),
+				GettextCatalog.GetString ("Unique id for the template."));
 			allLabels.Add (identityTextEntry.Label);
 
 			groupIdentityTextEntry = CreateTemplateTextEntry (
 				mainVBox,
-				GettextCatalog.GetString ("Group Identity:"));
+				GettextCatalog.GetString ("Group Identity:"),
+				GettextCatalog.GetString ("This should typically be a substring of the template's identity."));
 			allLabels.Add (groupIdentityTextEntry.Label);
 
 			// OK and Cancel buttons.
@@ -114,10 +121,14 @@ namespace MonoDevelop.Templating.Gui
 			Buttons.Add (okButton);
 		}
 
-		static TemplateTextEntry CreateTemplateTextEntry (VBox vbox, string labelText)
+		static TemplateTextEntry CreateTemplateTextEntry (VBox vbox, string labelText, string tooltipText = null)
 		{
 			var hbox = new HBox ();
 			vbox.PackStart (hbox);
+
+			if (!string.IsNullOrEmpty (tooltipText)) {
+				hbox.TooltipText = tooltipText;
+			}
 
 			var label = new Label ();
 			label.Text = labelText;
