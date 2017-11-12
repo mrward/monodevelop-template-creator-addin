@@ -2,7 +2,7 @@
 	"$schema": "http://json.schemastore.org/template",
 	"author": "${Author}",
 	"classifications": [],
-	"description": "",
+	"description": "${Description}",
 	"name": "${DisplayName}",
 	"defaultName": "${DefaultProjectName}",
 	"identity": "${Identity}",

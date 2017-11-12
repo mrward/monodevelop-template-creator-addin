@@ -69,9 +69,6 @@ namespace MonoDevelop.Templating
 		{
 			var jsonObject = JObject.Parse (json);
 
-			// Set description here so any double quote characters are escaped.
-			jsonObject ["description"] = template.Description;
-
 			var guids = (JArray)jsonObject ["guids"];
 
 			foreach (string projectGuid in template.ProjectGuids) {

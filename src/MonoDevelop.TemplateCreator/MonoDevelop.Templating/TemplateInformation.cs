@@ -30,6 +30,7 @@ using System.Reflection;
 using MonoDevelop.Core;
 using MonoDevelop.Core.StringParsing;
 using MonoDevelop.Projects;
+using Newtonsoft.Json;
 
 namespace MonoDevelop.Templating
 {
@@ -98,9 +99,21 @@ namespace MonoDevelop.Templating
 			var bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase;
 			PropertyInfo property = GetType ().GetProperty (name, bindingFlags);
 			if (property != null) {
-				return property.GetValue (this) as string;
+				var propertyValue = property.GetValue (this) as string;
+				if (propertyValue != null) {
+					return JsonEscape (propertyValue);
+				}
 			}
 			return null;
+		}
+
+		static string JsonEscape (string propertyValue)
+		{
+			string escapedValue = JsonConvert.ToString (propertyValue);
+
+			// JsonConvert.ToString returns the string with double quotes at the start
+			// and at the end so these have to be removed.
+			return escapedValue.Substring (1, escapedValue.Length - 2);
 		}
 
 		IEnumerable<string> GetProjectGuids ()
