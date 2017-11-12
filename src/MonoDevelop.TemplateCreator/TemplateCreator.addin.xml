@@ -14,6 +14,7 @@
 		<Import file="MonoDevelop.TemplateCreator.dll" />
 		<Import file="Microsoft.TemplateEngine.Merged.dll" />
 		<Import file="ConfigurationFiles/template.json" />
+		<Import file="TemplateCreator.addin-template.xml" />
 	</Runtime>
 
 	<Dependencies>
