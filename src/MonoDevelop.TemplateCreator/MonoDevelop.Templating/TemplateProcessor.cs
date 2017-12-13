@@ -167,7 +167,9 @@ namespace MonoDevelop.Templating
 				foreach (var file in p.Files) {
 					//Format only newly created files
 					if (!filesBeforeCreation.Contains ((string)file.FilePath, FilePath.PathComparer)) {
-						await FormatFile (parentFolder?.Policies ?? p.Policies, file.FilePath);
+						if (template.CanFormatFile (file.FilePath)) {
+							await FormatFile (parentFolder?.Policies ?? p.Policies, file.FilePath);
+						}
 					}
 				}
 			}

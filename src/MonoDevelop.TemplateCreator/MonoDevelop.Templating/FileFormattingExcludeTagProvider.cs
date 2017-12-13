@@ -1,5 +1,5 @@
 ﻿//
-// TemplateInfoExtensions.cs
+// FileFormattingExcludeTagProvider.cs
 //
 // Author:
 //       Matt Ward <matt.ward@xamarin.com>
@@ -24,49 +24,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Microsoft.TemplateEngine.Abstractions;
-using Microsoft.TemplateEngine.Edge.Settings;
-
 namespace MonoDevelop.Templating
 {
-	public static class TemplateInfoExtensions
+	static class FileFormattingExcludeTagProvider
 	{
-		public static string GetLanguage (this TemplateInfo templateInfo)
-		{
-			ICacheTag languageTag;
-			if (templateInfo.Tags.TryGetValue ("language", out languageTag)) {
-				return languageTag.DefaultValue;
-			}
-
-			return string.Empty;
-		}
-
-		public static string GetCategory (this TemplateInfo info, string defaultCategory)
-		{
-			ICacheTag tag = null;
-			foreach (string tagName in TemplateCategoryTagNameProvider.CategoryTagNames) {
-				if (info.Tags.TryGetValue (tagName, out tag)) {
-					if (!string.IsNullOrEmpty (tag.DefaultValue)) {
-						return tag.DefaultValue;
-					}
-				}
-			}
-
-			return defaultCategory;
-		}
-
-		public static string GetFileFormatExclude (this TemplateInfo info)
-		{
-			ICacheTag tag = null;
-			foreach (string tagName in FileFormattingExcludeTagProvider.TagNames) {
-				if (info.Tags.TryGetValue (tagName, out tag)) {
-					if (!string.IsNullOrEmpty (tag.DefaultValue)) {
-						return tag.DefaultValue;
-					}
-				}
-			}
-
-			return null;
-		}
+		public static readonly string[] TagNames = new string [] {
+			"md-file-format-exclude",
+			"vsmac-file-format-exclude"
+		};
 	}
 }

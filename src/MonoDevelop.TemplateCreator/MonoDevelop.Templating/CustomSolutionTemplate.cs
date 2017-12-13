@@ -24,6 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using System.Collections.Generic;
 using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Edge.Settings;
 using MonoDevelop.Ide.Templates;
@@ -41,12 +43,51 @@ namespace MonoDevelop.Templating
 
 			Category = info.GetCategory ("other/net/general");
 			Description = info.Description;
+			FileFormatExclude = info.GetFileFormatExclude ();
 			GroupId = info.GroupIdentity;
 			Language = info.GetLanguage ();
 		}
 
 		public TemplateInfo Info {
 			get { return info; }
+		}
+
+		public string FileFormatExclude { get; private set; }
+
+		public bool CanFormatFile (string fileName)
+		{
+			if (string.IsNullOrEmpty (FileFormatExclude))
+				return true;
+
+			if (excludedFileEndings == null) {
+				excludedFileEndings = GetExcludedFileEndings (FileFormatExclude);
+			}
+
+			foreach (string ending in excludedFileEndings) {
+				if (fileName.EndsWith (ending, StringComparison.OrdinalIgnoreCase)) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		List<string> excludedFileEndings;
+
+		static List<string> GetExcludedFileEndings (string exclude)
+		{
+			var result = new List<string> ();
+			foreach (string pattern in exclude.Split (';')) {
+				string trimmedPattern = pattern.Trim ();
+				if (string.IsNullOrEmpty (trimmedPattern)) {
+					// ignore
+				} else if (trimmedPattern.StartsWith ("*.", StringComparison.Ordinal)) {
+					result.Add (trimmedPattern.Substring (1));
+				} else {
+					result.Add (trimmedPattern);
+				}
+			}
+			return result;
 		}
 	}
 }
