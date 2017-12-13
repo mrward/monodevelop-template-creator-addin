@@ -28,9 +28,28 @@ namespace MonoDevelop.Templating
 {
 	static class FileFormattingExcludeTagProvider
 	{
+		public static readonly string MonoDevelopFileFormatExcludeTagName = "md-file-format-exclude";
+		public static readonly string VSMacFileFormatExcludeTagName = "vsmac-file-format-exclude";
+
 		public static readonly string[] TagNames = new string [] {
-			"md-file-format-exclude",
-			"vsmac-file-format-exclude"
+			MonoDevelopFileFormatExcludeTagName,
+			VSMacFileFormatExcludeTagName
 		};
+
+		public static readonly string DefaultTagName;
+
+		static FileFormattingExcludeTagProvider ()
+		{
+			DefaultTagName = GetDefaultTagName ();
+		}
+
+		static string GetDefaultTagName ()
+		{
+			if (TemplatingServices.IsVisualStudio ()) {
+				return VSMacFileFormatExcludeTagName;
+			}
+
+			return MonoDevelopFileFormatExcludeTagName;
+		}
 	}
 }

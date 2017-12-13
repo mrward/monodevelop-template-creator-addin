@@ -70,6 +70,8 @@ namespace MonoDevelop.Templating
 		public string CategoryTagName { get; set; }
 		public string Category { get; set; }
 		public string Description { get; set; }
+		public string FileFormatExclude { get; set; }
+		public string FileFormatExcludeTagName { get; set; }
 		public string[] ProjectFilePrimaryOutputs { get; set; }
 		public string[] ProjectGuids { get; set; }
 
@@ -81,6 +83,8 @@ namespace MonoDevelop.Templating
 			Language = project.LanguageName;
 			ShortName = project.Name;
 			Description = string.Empty;
+			FileFormatExclude = string.Empty;
+			FileFormatExcludeTagName = FileFormattingExcludeTagProvider.DefaultTagName;
 
 			Category = "other/net/general";
 			CategoryTagName = TemplateCategoryTagNameProvider.DefaultCategoryTagName;

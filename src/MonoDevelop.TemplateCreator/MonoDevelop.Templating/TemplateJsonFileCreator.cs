@@ -84,6 +84,11 @@ namespace MonoDevelop.Templating
 				outputs.Add (pathProperty);
 			}
 
+			if (!string.IsNullOrEmpty (template.FileFormatExclude)) {
+				var tags = jsonObject ["tags"];
+				tags [template.FileFormatExcludeTagName] = template.FileFormatExclude;
+			}
+
 			return ToString (jsonObject);
 		}
 

@@ -43,6 +43,7 @@ namespace MonoDevelop.Templating.Gui
 		TemplateTextEntry displayNameTextEntry;
 		TemplateTextEntry categoryTextEntry;
 		TemplateTextEntry descriptionTextEntry;
+		TemplateTextEntry fileFormatExcludeTextEntry;
 		Button selectCategoryButton;
 		List<Label> allLabels = new List<Label> ();
 
@@ -82,6 +83,12 @@ namespace MonoDevelop.Templating.Gui
 				GettextCatalog.GetString ("Category:"),
 				GettextCatalog.GetString ("Defines where the project template will be displayed in the New Project dialog."));
 			allLabels.Add (categoryTextEntry.Label);
+
+			fileFormatExcludeTextEntry = CreateTemplateTextEntry (
+				mainVBox,
+				GettextCatalog.GetString ("File Format Exclude:"),
+				GettextCatalog.GetString ("A semi-colon separated list of files (e.g. 'info.plist;*.min.js') which will not be formatted when creating the project."));
+			allLabels.Add (fileFormatExcludeTextEntry.Label);
 
 			selectCategoryButton = new Button ();
 			selectCategoryButton.Label = "\u2026";

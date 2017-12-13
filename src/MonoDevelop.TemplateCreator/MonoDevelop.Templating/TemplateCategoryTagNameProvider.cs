@@ -24,9 +24,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
-using MonoDevelop.Core;
-
 namespace MonoDevelop.Templating
 {
 	class TemplateCategoryTagNameProvider
@@ -48,10 +45,8 @@ namespace MonoDevelop.Templating
 
 		static string GetDefaultCategoryTagName ()
 		{
-			if (BrandingService.ApplicationName != null) {
-				if (BrandingService.ApplicationName.StartsWith ("Visual Studio", StringComparison.OrdinalIgnoreCase)) {
-					return VSMacCategoryTagName;
-				}
+			if (TemplatingServices.IsVisualStudio ()) {
+				return VSMacCategoryTagName;
 			}
 
 			return MonoDevelopCategoryTagName;

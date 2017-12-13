@@ -125,6 +125,17 @@ namespace MonoDevelop.Templating
 			TemplatingOutputPad.WriteText (message);
 		}
 
+		public static bool IsVisualStudio ()
+		{
+			if (BrandingService.ApplicationName != null) {
+				if (BrandingService.ApplicationName.StartsWith ("Visual Studio", StringComparison.OrdinalIgnoreCase)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		static IEnumerable<TemplateCategoryViewModel> AppendCustomCategories (this IEnumerable<TemplateCategoryViewModel> categories)
 		{
 			if (!TemplateCreatorAddinXmlFile.IsModified) {

@@ -48,6 +48,7 @@ namespace MonoDevelop.Templating.Gui
 			shortNameTextEntry.TextEntry.Text = viewModel.ShortName;
 			categoryTextEntry.TextEntry.Text = viewModel.Category;
 			descriptionTextEntry.TextEntry.Text = viewModel.Description;
+			fileFormatExcludeTextEntry.TextEntry.Text = viewModel.FileFormatExclude;
 
 			authorTextEntry.TextEntry.Changed += AuthorTextEntryChanged;
 			defaultProjectNameTextEntry.TextEntry.Changed += DefaultProjectNameTextEntryChanged;
@@ -57,6 +58,7 @@ namespace MonoDevelop.Templating.Gui
 			shortNameTextEntry.TextEntry.Changed += ShortNameTextEntryChanged;
 			categoryTextEntry.TextEntry.Changed += CategoryTextEntryChanged;
 			descriptionTextEntry.TextEntry.Changed += DescriptionTextChanged;
+			fileFormatExcludeTextEntry.TextEntry.Changed += FileFormatExcludeTextChanged ;
 
 			selectCategoryButton.Clicked += SelectCategoryButtonClicked;
 		}
@@ -105,6 +107,11 @@ namespace MonoDevelop.Templating.Gui
 		void DescriptionTextChanged (object sender, EventArgs e)
 		{
 			viewModel.Description = descriptionTextEntry.TextEntry.Text;
+		}
+
+		void FileFormatExcludeTextChanged (object sender, EventArgs e)
+		{
+			viewModel.FileFormatExclude = fileFormatExcludeTextEntry.TextEntry.Text;
 		}
 
 		void SelectCategoryButtonClicked (object sender, EventArgs e)
