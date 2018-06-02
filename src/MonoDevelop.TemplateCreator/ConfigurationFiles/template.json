@@ -16,6 +16,17 @@
 	"sourceName": "${SourceName}",
 	"guids": [
 	],
+	"sources": [
+		{
+			"modifiers": [
+				{
+					"exclude": [
+						".vs/**/*"
+					]
+				}
+			]
+		}
+	],
 	"primaryOutputs": [
 	]
 }
