@@ -92,7 +92,12 @@ namespace MonoDevelop.Templating
 
 			foreach (string folder in TemplatingServices.Options.TemplateFolders) {
 				if (Directory.Exists (folder)) {
-					settingsLoader.UserTemplateCache.Scan (folder);
+					try {
+						settingsLoader.UserTemplateCache.Scan (folder);
+					} catch (Exception ex) {
+						string message = string.Format ("Unable to load templates from folder '{0}.", folder);
+						TemplatingServices.LogError (message, ex);
+					}
 				}
 			}
 
