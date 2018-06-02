@@ -74,6 +74,11 @@ namespace MonoDevelop.Templating
 			var parameters = new Dictionary<string, string> ();
 			var result = await templateEngine.Create (template, config, parameters);
 
+			if (result.Status != CreationResultStatus.Success) {
+				string message = GettextCatalog.GetString ("Could not create template. Id='{0}' {1} {2}", template.Id, result.Status, result.Message);
+				throw new InvalidOperationException (message);
+			}
+
 			List<string> filesToOpen = GetFilesToOpen (result).ToList ();
 			workspaceItems = await GetWorkspaceItems (result);
 
