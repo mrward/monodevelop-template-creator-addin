@@ -182,7 +182,7 @@ namespace MonoDevelop.Templating
 
 		async Task FormatFile (PolicyContainer policies, FilePath file)
 		{
-			string mime = DesktopService.GetMimeTypeForUri (file);
+			string mime = IdeServices.DesktopService.GetMimeTypeForUri (file);
 			if (mime == null)
 				return;
 			var formatter = CodeFormatterService.GetFormatter (mime);

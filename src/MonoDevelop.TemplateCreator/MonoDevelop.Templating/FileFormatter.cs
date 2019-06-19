@@ -57,7 +57,7 @@ namespace MonoDevelop.Templating
 
 		static CodeFormatter GetFormatter (FilePath fileName)
 		{
-			string mime = DesktopService.GetMimeTypeForUri (fileName);
+			string mime = IdeServices.DesktopService.GetMimeTypeForUri (fileName);
 			if (mime != null) {
 				return CodeFormatterService.GetFormatter (mime);
 			}

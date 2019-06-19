@@ -84,7 +84,7 @@ namespace MonoDevelop.Templating
 			} catch (Exception ex) {
 				LogError ("Unable to get project template categories using reflection.", ex);
 
-				return IdeApp.Services.TemplatingService.GetProjectTemplateCategories ()
+				return IdeServices.TemplatingService.GetProjectTemplateCategories ()
 					.Select (category => new TemplateCategoryViewModel (null, category))
 					.AppendCustomCategories ();
 			}
