@@ -1,0 +1,35 @@
+<Project>
+  <PropertyGroup>
+    <MDBinDir>\Applications\Visual Studio %28Preview%29.app\Contents\MonoBundle</MDBinDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Addins">
+      <Private>False</Private>
+      <HintPath>$(MDBinDir)\Mono.Addins.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoDevelop.Core">
+      <Private>False</Private>
+      <HintPath>$(MDBinDir)\MonoDevelop.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoDevelop.Ide">
+      <Private>False</Private>
+      <HintPath>$(MDBinDir)\MonoDevelop.Ide.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <Private>False</Private>
+      <HintPath>$(MDBinDir)\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable">
+      <Private>False</Private>
+      <HintPath>$(MDBinDir)\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Mac">
+      <Private>False</Private>
+      <HintPath>/usr/local/share/dotnet/packs/Microsoft.macOS.Ref/12.1.301-preview.13.7/ref/net6.0/Xamarin.Mac.dll</HintPath>
+    </Reference>
+    <Reference Include="Xwt">
+      <Private>False</Private>
+      <HintPath>$(MDBinDir)\Xwt.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -25,23 +25,43 @@
 // THE SOFTWARE.
 
 using System;
-using Gtk;
+using AppKit;
 using MonoDevelop.Components;
+using MonoDevelop.Components.Declarative;
 using MonoDevelop.Components.Docking;
 using MonoDevelop.Core;
 using MonoDevelop.Ide.Gui;
-using MonoDevelop.Ide.Gui.Components;
+using MonoDevelop.Ide.Gui.Components.LogView;
 
 namespace MonoDevelop.Templating.Gui
 {
 	public class TemplatingOutputPad : PadContent
 	{
 		static TemplatingOutputPad instance;
-		static readonly LogView logView = new LogView ();
+		static NSView logView;
+		static LogViewProgressMonitor progressMonitor;
+		static LogViewController logViewController;
+		ToolbarButtonItem clearButton;
 
 		public TemplatingOutputPad ()
 		{
 			instance = this;
+
+			CreateLogView ();
+		}
+
+		static void CreateLogView ()
+		{
+			if (logViewController != null) {
+				return;
+			}
+
+			logViewController = new LogViewController ("LogMonitor");
+			logView = logViewController.Control.GetNativeWidget<NSView> ();
+
+			// Need to create a progress monitor to avoid a null reference exception
+			// when LogViewController.WriteText is called.
+			progressMonitor = (LogViewProgressMonitor)logViewController.GetProgressMonitor ();
 		}
 
 		public static TemplatingOutputPad Instance {
@@ -50,22 +70,23 @@ namespace MonoDevelop.Templating.Gui
 
 		protected override void Initialize (IPadWindow window)
 		{
-			DockItemToolbar toolbar = window.GetToolbar (DockPositionType.Right);
+			var toolbar = new Toolbar ();
 
-			var clearButton = new Button (new ImageView (Ide.Gui.Stock.Broom, IconSize.Menu));
+			clearButton = new ToolbarButtonItem (toolbar.Properties, nameof (clearButton));
+			clearButton.Icon = Stock.Broom;
 			clearButton.Clicked += ButtonClearClick;
-			clearButton.TooltipText = GettextCatalog.GetString ("Clear");
-			toolbar.Add (clearButton);
-			toolbar.ShowAll ();
-			logView.ShowAll ();
+			clearButton.Tooltip = GettextCatalog.GetString ("Clear");
+			toolbar.AddItem (clearButton);
+
+			window.SetToolbar (toolbar, DockPositionType.Right);
 		}
 
 		public override Control Control {
 			get { return logView; }
 		}
 
-		public static LogView LogView {
-			get { return logView; }
+		public static LogViewController LogView {
+			get { return logViewController; }
 		}
 
 		void ButtonClearClick (object sender, EventArgs e)
@@ -75,17 +96,27 @@ namespace MonoDevelop.Templating.Gui
 
 		public static void Clear ()
 		{
-			logView.Clear ();
+			if (logViewController != null) {
+				Runtime.RunInMainThread (() => {
+					logViewController.Clear ();
+				});
+			}
 		}
 
 		public static void WriteText (string message)
 		{
-			logView.WriteText (message + Environment.NewLine);
+			Runtime.RunInMainThread (() => {
+				CreateLogView ();
+				logViewController.WriteText (progressMonitor, message + Environment.NewLine);
+			});
 		}
 
 		public static void WriteError (string message)
 		{
-			logView.WriteError (message + Environment.NewLine);
+			Runtime.RunInMainThread (() => {
+				CreateLogView ();
+				logViewController.WriteError (progressMonitor, message + Environment.NewLine);
+			});
 		}
 	}
 }

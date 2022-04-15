@@ -36,23 +36,25 @@ namespace MonoDevelop.Templating.Commands
 	{
 		protected FilePath CreateTemplateJsonFile (Solution solution, TemplateInformation viewModel)
 		{
-			return CreateTemplateJsonFile (solution.BaseDirectory, viewModel, solution.Policies);
+			return CreateTemplateJsonFile (solution.BaseDirectory, viewModel, solution.RootFolder, null);
 		}
 
 		protected FilePath CreateTemplateJsonFile (DotNetProject project, TemplateInformation viewModel)
 		{
-			return CreateTemplateJsonFile (project.BaseDirectory, viewModel, project.Policies);
+			SolutionFolder policyParent = project?.ParentSolution?.RootFolder;
+			return CreateTemplateJsonFile (project.BaseDirectory, viewModel, policyParent, project);
 		}
 
 		FilePath CreateTemplateJsonFile (
 			FilePath baseDirectory,
 			TemplateInformation viewModel,
-			PolicyBag policies)
+			SolutionFolderItem policyParent,
+			Project project)
 		{
 			var templateJsonFileCreator = new TemplateJsonFileCreator ();
 			templateJsonFileCreator.CreateInDirectory (baseDirectory, viewModel);
 
-			FileFormatter.FormatFile (policies, templateJsonFileCreator.TemplateJsonFilePath);
+			FileFormatter.FormatFile (policyParent, project, templateJsonFileCreator.TemplateJsonFilePath);
 
 			IdeApp.Workbench.OpenDocument (
 				templateJsonFileCreator.TemplateJsonFilePath,

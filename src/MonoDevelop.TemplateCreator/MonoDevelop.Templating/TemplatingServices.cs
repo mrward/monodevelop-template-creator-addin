@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Mono.Addins;
 using MonoDevelop.Core;
 using MonoDevelop.Ide;
@@ -76,7 +77,7 @@ namespace MonoDevelop.Templating
 			get { return templatingEngine; }
 		}
 
-		public static IEnumerable<TemplateCategoryViewModel> GetProjectTemplateCategories ()
+		public static async Task<IEnumerable<TemplateCategoryViewModel>> GetProjectTemplateCategories ()
 		{
 			try {
 				return GetProjectTemplateCategoriesByReflection (TemplateCreatorAddinXmlFile.IsModified)
@@ -84,7 +85,8 @@ namespace MonoDevelop.Templating
 			} catch (Exception ex) {
 				LogError ("Unable to get project template categories using reflection.", ex);
 
-				return IdeServices.TemplatingService.GetProjectTemplateCategories ()
+				IEnumerable<TemplateCategory> categories = await IdeServices.TemplatingService.GetProjectTemplateCategoriesAsync ();
+				return categories
 					.Select (category => new TemplateCategoryViewModel (null, category))
 					.AppendCustomCategories ();
 			}

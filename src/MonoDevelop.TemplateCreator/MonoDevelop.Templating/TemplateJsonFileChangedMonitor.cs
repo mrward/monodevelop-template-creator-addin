@@ -24,7 +24,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
 using MonoDevelop.Core;
 
 namespace MonoDevelop.Templating
@@ -35,7 +34,7 @@ namespace MonoDevelop.Templating
 		{
 			FileService.FileChanged += FileChanged;
 			FileService.FileRemoved += FileRemoved;
-			FileService.FileRenamed += FileRenamed;
+			FileService.FileMoved += FileMoved;
 		}
 
 		void FileChanged (object sender, FileEventArgs e)
@@ -73,7 +72,7 @@ namespace MonoDevelop.Templating
 			}
 		}
 
-		void FileRenamed (object sender, FileCopyEventArgs e)
+		void FileMoved (object sender, FileCopyEventArgs e)
 		{
 			foreach (FileCopyEventInfo file in e) {
 				FileRenamed (file);

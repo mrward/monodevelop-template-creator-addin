@@ -48,7 +48,7 @@ namespace MonoDevelop.Templating.Gui
 			viewModel = new TemplateCategoriesOptionsViewModel ();
 			viewModel.Load ();
 			var widget = new TemplateCategoriesOptionsWidget (viewModel);
-			return widget.ToGtkWidget ();
+			return new XwtControl (widget);
 		}
 	}
 }

@@ -1,96 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\ILRepack.2.0.13\build\ILRepack.props" Condition="Exists('..\packages\ILRepack.2.0.13\build\ILRepack.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="MonoDevelop.References.props" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F9CCD990-95A0-45A7-8CDF-764694E6F448}</ProjectGuid>
-    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>MonoDevelop.Templating</RootNamespace>
     <AssemblyName>MonoDevelop.TemplateCreator</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\..\bin</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\bin</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateJsonFileCreator.cs" />
-    <Compile Include="MonoDevelop.Templating\DotNetProjectExtensions.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateInformation.cs" />
-    <Compile Include="MonoDevelop.Templating\FileFormatter.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplatingServices.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplatingEventsService.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplatingOptions.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateFoldersOptionsWidget.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateFoldersOptionsWidget.UI.cs">
+    <Compile Update="MonoDevelop.Templating.Gui\TemplateFoldersOptionsWidget.UI.cs">
       <DependentUpon>TemplateFoldersOptionsWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateInformationDialog.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateInformationDialog.UI.cs">
+    <Compile Update="MonoDevelop.Templating.Gui\TemplateInformationDialog.UI.cs">
       <DependentUpon>TemplateInformationDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateFoldersOptionsPanel.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateFoldersOptionsViewModel.cs" />
-    <Compile Include="MonoDevelop.Templating.NodeBuilders\ProjectNodeBuilderExtension.cs" />
-    <Compile Include="MonoDevelop.Templating.NodeBuilders\TemplateConfigFolder.cs" />
-    <Compile Include="MonoDevelop.Templating.Commands\CreateTemplateHandler.cs" />
-    <Compile Include="MonoDevelop.Templating.NodeBuilders\TemplateConfigFolderNodeBuilderExtension.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplatingEngine.cs" />
-    <Compile Include="MonoDevelop.Templating\CustomTemplateEngineHost.cs" />
-    <Compile Include="MonoDevelop.Templating\CustomProjectTemplatingProvider.cs" />
-    <Compile Include="MonoDevelop.Templating\CustomSolutionTemplate.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateInfoExtensions.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateProcessor.cs" />
-    <Compile Include="MonoDevelop.Templating\ProcessedCustomTemplateResult.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateJsonFileChangedMonitor.cs" />
-    <Compile Include="MonoDevelop.Templating\FilePathExtensions.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateCategoryTagNameProvider.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesDialog.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesDialog.UI.cs">
+    <Compile Update="MonoDevelop.Templating.Gui\TemplateCategoriesDialog.UI.cs">
       <DependentUpon>TemplateCategoriesDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesWidget.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesWidget.UI.cs">
+    <Compile Update="MonoDevelop.Templating.Gui\TemplateCategoriesWidget.UI.cs">
       <DependentUpon>TemplateCategoriesWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoryViewModel.cs" />
-    <Compile Include="MonoDevelop.Templating.Commands\CreateTemplateForSolutionHandler.cs" />
-    <Compile Include="MonoDevelop.Templating\IFolderItemExtensions.cs" />
-    <Compile Include="MonoDevelop.Templating\SolutionExtensions.cs" />
-    <Compile Include="MonoDevelop.Templating.Commands\CreateTemplateHandlerBase.cs" />
-    <Compile Include="MonoDevelop.Templating.NodeBuilders\SolutionNodeBuilderExtension.cs" />
-    <Compile Include="MonoDevelop.Templating.NodeBuilders\SolutionTemplateConfigFolder.cs" />
-    <Compile Include="MonoDevelop.Templating.NodeBuilders\SolutionTemplateConfigFolderNodeBuilder.cs" />
-    <Compile Include="MonoDevelop.Templating.NodeBuilders\NodeInfoExtensions.cs" />
-    <Compile Include="MonoDevelop.Templating.Commands\SolutionTemplateConfigFolderNodeCommandHandler.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesOptionsPanel.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesOptionsViewModel.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesOptionsWidget.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoriesOptionsWidget.UI.cs">
+    <Compile Update="MonoDevelop.Templating.Gui\TemplateCategoriesOptionsWidget.UI.cs">
       <DependentUpon>TemplateCategoriesOptionsWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoryWidget.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplateCategoryWidget.UI.cs">
+    <Compile Update="MonoDevelop.Templating.Gui\TemplateCategoryWidget.UI.cs">
       <DependentUpon>TemplateCategoryWidget.cs</DependentUpon>
     </Compile>
-    <Compile Include="MonoDevelop.Templating\ProjectTemplateCategoriesXmlGenerator.cs" />
-    <Compile Include="MonoDevelop.Templating\TemplateCreatorAddinXmlFile.cs" />
-    <Compile Include="MonoDevelop.Templating.Gui\TemplatingOutputPad.cs" />
-    <Compile Include="MonoDevelop.Templating\FileFormattingExcludeTagProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ConfigurationFiles\template.json">
@@ -103,28 +39,10 @@
       <Link>TemplateCreator.addin-template.xml</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
     <Reference Include="Microsoft.TemplateEngine.Merged">
       <HintPath>..\..\lib\merged\Microsoft.TemplateEngine.Merged.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Policies>
-          <DotNetNamingPolicy ResourceNamePolicy="FileFormatDefault" DirectoryNamespaceAssociation="Flat" />
-        </Policies>
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
-  <Import Project="MonoDevelop.References.proj" />
 </Project>

@@ -83,7 +83,7 @@ namespace MonoDevelop.Templating.NodeBuilders
 		{
 			var folder = (SolutionTemplateConfigFolder)dataObject;
 
-			nodeInfo.Label = GLib.Markup.EscapeText (folder.Name);
+			nodeInfo.Label = folder.Name;
 			nodeInfo.Icon = folderOpenIcon;
 			nodeInfo.ClosedIcon = folderClosedIcon;
 

@@ -65,8 +65,7 @@ namespace MonoDevelop.Templating.Gui
 
 		public bool ShowWithParent ()
 		{
-			WindowFrame parent = Toolkit.CurrentEngine.WrapWindow (IdeApp.Workbench.RootWindow);
-			return Run (parent) == Command.Ok;
+			return Run (MessageDialog.RootWindow) == Command.Ok;
 		}
 
 		void AuthorTextEntryChanged (object sender, EventArgs e)

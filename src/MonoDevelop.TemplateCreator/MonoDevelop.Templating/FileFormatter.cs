@@ -25,44 +25,35 @@
 // THE SOFTWARE.
 
 using System;
-using System.IO;
-using System.Text;
+using System.Threading.Tasks;
 using MonoDevelop.Core;
-using MonoDevelop.Core.Text;
-using MonoDevelop.Ide;
-using MonoDevelop.Ide.CodeFormatting;
-using MonoDevelop.Projects.Policies;
-using MonoDevelop.Templating.Gui;
+using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating
 {
 	static class FileFormatter
 	{
-		public static void FormatFile (PolicyContainer policies, FilePath fileName)
+		public static void FormatFile (
+			SolutionFolderItem policyParent,
+			Project project,
+			FilePath fileName)
 		{
-			CodeFormatter formatter = GetFormatter (fileName);
-			if (formatter == null)
-				return;
-
 			try {
-				string content = File.ReadAllText (fileName);
-				string formatted = formatter.FormatText (policies, content);
-				if (formatted != null) {
-					TextFileUtility.WriteText (fileName, formatted, Encoding.UTF8);
-				}
+				var formatter = new MicrosoftTemplateEngineFileFormatter ();
+				formatter.FormatFile (policyParent, project, fileName);
 			} catch (Exception ex) {
-				TemplatingServices.LogError ("File formatting failed", ex);
+				LoggingService.LogError ("FormatFile error", ex);
 			}
 		}
 
-		static CodeFormatter GetFormatter (FilePath fileName)
+		public static async Task FormatFileAsync (SolutionFolderItem policyParent, Project project, string fileName)
 		{
-			string mime = IdeServices.DesktopService.GetMimeTypeForUri (fileName);
-			if (mime != null) {
-				return CodeFormatterService.GetFormatter (mime);
+			try {
+				var formatter = new MicrosoftTemplateEngineFileFormatter ();
+				await formatter.FormatFileAsync (policyParent, project, fileName);
+			} catch (Exception ex) {
+				LoggingService.LogError ("FormatFile error", ex);
 			}
-
-			return null;
 		}
 	}
 }

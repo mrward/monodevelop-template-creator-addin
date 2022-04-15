@@ -173,27 +173,9 @@ namespace MonoDevelop.Templating
 					//Format only newly created files
 					if (!filesBeforeCreation.Contains ((string)file.FilePath, FilePath.PathComparer)) {
 						if (template.CanFormatFile (file.FilePath)) {
-							await FormatFile (parentFolder?.Policies ?? p.Policies, file.FilePath);
+							await FileFormatter.FormatFileAsync (parentFolder, p, file.FilePath);
 						}
 					}
-				}
-			}
-		}
-
-		async Task FormatFile (PolicyContainer policies, FilePath file)
-		{
-			string mime = IdeServices.DesktopService.GetMimeTypeForUri (file);
-			if (mime == null)
-				return;
-			var formatter = CodeFormatterService.GetFormatter (mime);
-			if (formatter != null) {
-				try {
-					var content = await TextFileUtility.ReadAllTextAsync (file);
-					var formatted = formatter.FormatText (policies, content.Text);
-					if (formatted != null)
-						TextFileUtility.WriteText (file, formatted, content.Encoding);
-				} catch (Exception ex) {
-					TemplatingServices.LogError ("File formatting failed", ex);
 				}
 			}
 		}

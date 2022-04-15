@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Threading.Tasks;
 using MonoDevelop.Ide;
 using Xwt;
 
@@ -38,15 +39,21 @@ namespace MonoDevelop.Templating.Gui
 		{
 			Build ();
 
-			templateCategoriesWidget.AddTemplateCategories (TemplatingServices.GetProjectTemplateCategories ());
+			AddTemplateCategoriesAsync ().Ignore ();
+		}
+
+		async Task AddTemplateCategoriesAsync ()
+		{
+			var categories = await TemplatingServices.GetProjectTemplateCategories ();
+
+			templateCategoriesWidget.AddTemplateCategories (categories);
 
 			templateCategoriesWidget.SelectedCategoryChanged += SelectedCategoryChanged;
 		}
 
 		public bool ShowWithParent ()
 		{
-			WindowFrame parent = Toolkit.CurrentEngine.WrapWindow (IdeApp.Workbench.RootWindow);
-			return Run (parent) == Command.Ok;
+			return Run (MessageDialog.RootWindow) == Command.Ok;
 		}
 
 		void SelectedCategoryChanged (object sender, EventArgs e)

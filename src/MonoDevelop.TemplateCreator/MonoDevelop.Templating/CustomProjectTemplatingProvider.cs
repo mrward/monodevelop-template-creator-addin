@@ -26,6 +26,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MonoDevelop.Ide.Projects;
 using MonoDevelop.Ide.Templates;
@@ -33,24 +34,25 @@ using MonoDevelop.Projects;
 
 namespace MonoDevelop.Templating
 {
-	class CustomProjectTemplatingProvider : IProjectTemplatingProvider
+	class CustomProjectTemplatingProvider : ProjectTemplatingProvider
 	{
 		SolutionTemplate[] cachedTemplates;
 		DateTime cacheExpiryDate;
 		TimeSpan cacheExpiryTimeSpan = TimeSpan.FromSeconds (1);
 
-		public bool CanProcessTemplate (SolutionTemplate template)
+		public override bool CanProcessTemplate (SolutionTemplate template)
 		{
 			return template is CustomSolutionTemplate;
 		}
 
-		public IEnumerable<SolutionTemplate> GetTemplates ()
+		public override Task<IEnumerable<SolutionTemplate>> GetTemplatesAsync ()
 		{
 			if (!UseCachedTemplates ()) {
-				return LoadTemplates ();
+				IEnumerable<SolutionTemplate> templates = LoadTemplates ();
+				return Task.FromResult (templates);
 			}
 
-			return cachedTemplates;
+			return Task.FromResult (cachedTemplates.AsEnumerable ());
 		}
 
 		IEnumerable<SolutionTemplate> LoadTemplates ()
@@ -68,7 +70,7 @@ namespace MonoDevelop.Templating
 			return cachedTemplates;
 		}
 
-		public Task<ProcessedTemplateResult> ProcessTemplate (
+		public override Task<ProcessedTemplateResult> ProcessTemplateAsync (
 			SolutionTemplate template,
 			NewProjectConfiguration config,
 			SolutionFolder parentFolder)

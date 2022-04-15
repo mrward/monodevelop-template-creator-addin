@@ -18,8 +18,8 @@
 	</Runtime>
 
 	<Dependencies>
-		<Addin id="::MonoDevelop.Core" version="8.1"/>
-		<Addin id="::MonoDevelop.Ide" version="8.1"/>
+		<Addin id="::MonoDevelop.Core" version="17.0"/>
+		<Addin id="::MonoDevelop.Ide" version="17.0"/>
 	</Dependencies>
 
 	<Extension path="/MonoDevelop/Ide/Commands">
@@ -74,11 +74,11 @@
 				_label="Custom Categories"
 				fill="true"
 				class="MonoDevelop.Templating.Gui.TemplateCategoriesOptionsPanel" />
-			<Section
+<!--			<Section
 				id="TemplateFolders"
 				_label="Custom Folders"
 				fill="true"
-				class="MonoDevelop.Templating.Gui.TemplateFoldersOptionsPanel" />
+				class="MonoDevelop.Templating.Gui.TemplateFoldersOptionsPanel" />-->
 		</Section>
 	</Extension>
 
