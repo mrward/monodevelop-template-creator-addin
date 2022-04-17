@@ -42,8 +42,10 @@ namespace MonoDevelop.Templating
         {
             try {
                 content = File.ReadAllText (fileName);
-                Stream stream = CreateFileContent (policyParent, project, string.Empty, fileName, string.Empty);
-                WriteFile (stream, fileName);
+#pragma warning disable CS0618 // Type or member is obsolete
+				Stream stream = CreateFileContent (policyParent, project, string.Empty, fileName, string.Empty);
+#pragma warning restore CS0618 // Type or member is obsolete
+				WriteFile (stream, fileName);
             } finally {
                 content = null;
             }

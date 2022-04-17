@@ -25,16 +25,10 @@
 // THE SOFTWARE.
 
 using System.Collections.Generic;
-using System.Globalization;
-using Microsoft.TemplateEngine.Edge;
-using Microsoft.TemplateEngine.Orchestrator.RunnableProjects;
-using Microsoft.TemplateEngine.Orchestrator.RunnableProjects.Config;
-using Microsoft.TemplateEngine.Utils;
-using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating
 {
-	class CustomTemplateEngineHost : DefaultTemplateEngineHost
+	class CustomTemplateEngineHost : Microsoft.TemplateEngine.Edge.DefaultTemplateEngineHost
 	{
 		static readonly string hostIdentifier = "MonoDevelopTemplateCreator";
 		static readonly string hostVersion = "0.1";
@@ -43,19 +37,29 @@ namespace MonoDevelop.Templating
 			{ "prefs:language", "C#" }
 		};
 
-		static readonly AssemblyComponentCatalog builtIns = new AssemblyComponentCatalog (new [] {
-			typeof (RunnableProjectGenerator).Assembly,
-			typeof (ConditionalConfig).Assembly
-		});
-
 		public CustomTemplateEngineHost ()
-			: base (hostIdentifier, hostVersion, CultureInfo.CurrentCulture.Name, preferences, builtIns)
+			: this (hostIdentifier, hostVersion)
 		{
 		}
 
-		public override void LogMessage (string message)
+		public CustomTemplateEngineHost (string name, string version)
+			: base (name,
+				version,
+				new Dictionary<string, string> { { "dotnet-cli-version", "0" } },
+				null,
+				new List<string> () { "vs-2017.3", "ide" },
+				new TemplateEngineLoggerFactory ())
 		{
-			TemplatingServices.LogInfo (message);
+		}
+
+		public override bool TryGetHostParamDefault (string paramName, out string value)
+		{
+			if (paramName == "HostIdentifier") {
+				value = HostIdentifier;
+				return true;
+			}
+			value = null;
+			return false;
 		}
 	}
 }

@@ -36,13 +36,9 @@ using Microsoft.TemplateEngine.Abstractions;
 using Microsoft.TemplateEngine.Edge.Template;
 using MonoDevelop.Core;
 using MonoDevelop.Core.Text;
-using MonoDevelop.Ide;
-using MonoDevelop.Ide.CodeFormatting;
 using MonoDevelop.Ide.Projects;
 using MonoDevelop.Ide.Templates;
 using MonoDevelop.Projects;
-using MonoDevelop.Projects.Policies;
-using MonoDevelop.Templating.Gui;
 
 namespace MonoDevelop.Templating
 {
@@ -75,7 +71,7 @@ namespace MonoDevelop.Templating
 			var result = await templateEngine.Create (template, config, parameters);
 
 			if (result.Status != CreationResultStatus.Success) {
-				string message = GettextCatalog.GetString ("Could not create template. Id='{0}' {1} {2}", template.Id, result.Status, result.Message);
+				string message = GettextCatalog.GetString ("Could not create template. Id='{0}' {1} {2}", template.Id, result.Status, result.ErrorMessage);
 				throw new InvalidOperationException (message);
 			}
 
@@ -128,15 +124,18 @@ namespace MonoDevelop.Templating
 			}
 		}
 
-		IEnumerable<string> GetFilesToOpen (TemplateCreationResult result)
+		IEnumerable<string> GetFilesToOpen (ITemplateCreationResult result)
 		{
-			foreach (var postAction in result.ResultInfo.PostActions) {
+			foreach (var postAction in result.CreationResult.PostActions) {
 				switch (postAction.ActionId.ToString ().ToUpper ()) {
 					case "84C0DA21-51C8-4541-9940-6CA19AF04EE6":
-						if (postAction.Args.TryGetValue ("files", out var files))
-							foreach (var fi in files.Split (';'))
-								if (int.TryParse (fi.Trim (), out var i))
-									yield return (Path.Combine (config.ProjectLocation, GetPath (result.ResultInfo.PrimaryOutputs [i])));
+						if (postAction.Args.TryGetValue ("files", out var files)) {
+							foreach (var fi in files.Split (';')) {
+								if (int.TryParse (fi.Trim (), out var i)) {
+									yield return (Path.Combine (config.ProjectLocation, GetPath (result.CreationResult.PrimaryOutputs [i])));
+								}
+							}
+						}
 						break;
 				}
 			}
@@ -144,16 +143,17 @@ namespace MonoDevelop.Templating
 
 		string GetPath (ICreationPath path)
 		{
-			if (Path.DirectorySeparatorChar != '\\')
+			if (Path.DirectorySeparatorChar != '\\') {
 				return path.Path.Replace ('\\', Path.DirectorySeparatorChar);
+			}
 			return path.Path;
 		}
 
-		async Task<List<IWorkspaceFileObject>> GetWorkspaceItems (TemplateCreationResult result)
+		async Task<List<IWorkspaceFileObject>> GetWorkspaceItems (ITemplateCreationResult result)
 		{
 			var items = new List<IWorkspaceFileObject> ();
 
-			foreach (ICreationPath path in result.ResultInfo.PrimaryOutputs) {
+			foreach (ICreationPath path in result.CreationResult.PrimaryOutputs) {
 				string fullPath = Path.Combine (config.ProjectLocation, GetPath (path));
 				if (Services.ProjectService.IsSolutionItemFile (fullPath)) {
 					items.Add (await Services.ProjectService.ReadSolutionItem (new ProgressMonitor (), fullPath));

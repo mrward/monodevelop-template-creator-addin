@@ -27,16 +27,16 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.TemplateEngine.Abstractions;
-using Microsoft.TemplateEngine.Edge.Settings;
+using Microsoft.TemplateEngine.Utils;
 using MonoDevelop.Ide.Templates;
 
 namespace MonoDevelop.Templating
 {
 	class CustomSolutionTemplate : SolutionTemplate
 	{
-		TemplateInfo info;
+		ITemplateInfo info;
 
-		public CustomSolutionTemplate (TemplateInfo info)
+		public CustomSolutionTemplate (ITemplateInfo info)
 			: base (info.Identity, info.Name, null)
 		{
 			this.info = info;
@@ -48,7 +48,7 @@ namespace MonoDevelop.Templating
 			Language = info.GetLanguage ();
 		}
 
-		public TemplateInfo Info {
+		public ITemplateInfo Info {
 			get { return info; }
 		}
 

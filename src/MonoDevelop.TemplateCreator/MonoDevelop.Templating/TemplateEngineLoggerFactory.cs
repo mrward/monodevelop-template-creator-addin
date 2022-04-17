@@ -1,10 +1,10 @@
 ﻿//
-// TemplateInfoExtensions.cs
+// TemplateEngineLoggerFactory.cs
 //
 // Author:
-//       Matt Ward <matt.ward@xamarin.com>
+//       Matt Ward <matt.ward@microsoft.com>
 //
-// Copyright (c) 2017 Xamarin Inc. (http://xamarin.com)
+// Copyright (c) 2022 Microsoft
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,32 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Microsoft.TemplateEngine.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace MonoDevelop.Templating
 {
-	public static class TemplateInfoExtensions
+	class TemplateEngineLoggerFactory : ILoggerFactory
 	{
-		public static string GetCategory (this ITemplateInfo info, string defaultCategory)
+		public TemplateEngineLoggerFactory ()
 		{
-			foreach (string tagName in TemplateCategoryTagNameProvider.CategoryTagNames) {
-				if (info.TagsCollection.TryGetValue (tagName, out string tagValue)) {
-					return tagValue ?? string.Empty;
-				}
-			}
-
-			return defaultCategory;
 		}
 
-		public static string GetFileFormatExclude (this ITemplateInfo info)
+		public void AddProvider (ILoggerProvider provider)
 		{
-			foreach (string tagName in FileFormattingExcludeTagProvider.TagNames) {
-				if (info.TagsCollection.TryGetValue (tagName, out string tagValue)) {
-					return tagValue ?? string.Empty;
-				}
-			}
+		}
 
-			return null;
+		public ILogger CreateLogger (string categoryName)
+		{
+			return new TemplateEngineLogger ();
+		}
+
+		public void Dispose ()
+		{
 		}
 	}
 }
+

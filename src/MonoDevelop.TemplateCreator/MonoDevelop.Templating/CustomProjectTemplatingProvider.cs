@@ -45,21 +45,20 @@ namespace MonoDevelop.Templating
 			return template is CustomSolutionTemplate;
 		}
 
-		public override Task<IEnumerable<SolutionTemplate>> GetTemplatesAsync ()
+		public override async Task<IEnumerable<SolutionTemplate>> GetTemplatesAsync ()
 		{
 			if (!UseCachedTemplates ()) {
-				IEnumerable<SolutionTemplate> templates = LoadTemplates ();
-				return Task.FromResult (templates);
+				return await LoadTemplates ();
 			}
 
-			return Task.FromResult (cachedTemplates.AsEnumerable ());
+			return cachedTemplates.AsEnumerable ();
 		}
 
-		IEnumerable<SolutionTemplate> LoadTemplates ()
+		async Task<IEnumerable<SolutionTemplate>> LoadTemplates ()
 		{
 			try {
 				var templateEngine = TemplatingServices.TemplatingEngine;
-				templateEngine.LoadTemplates ();
+				await templateEngine.LoadTemplates ();
 
 				return templateEngine.Templates;
 			} catch (Exception ex) {

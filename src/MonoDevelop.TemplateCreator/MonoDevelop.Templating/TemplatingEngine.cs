@@ -28,11 +28,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.TemplateEngine.Abstractions;
+using Microsoft.TemplateEngine.Abstractions.TemplatePackage;
 using Microsoft.TemplateEngine.Edge;
 using Microsoft.TemplateEngine.Edge.Settings;
 using Microsoft.TemplateEngine.Edge.Template;
-using Microsoft.TemplateEngine.Utils;
 using MonoDevelop.Ide.Projects;
 
 namespace MonoDevelop.Templating
@@ -42,33 +44,42 @@ namespace MonoDevelop.Templating
 		TemplateCreator templateCreator;
 		CustomTemplateEngineHost host;
 		EngineEnvironmentSettings settings;
-		Paths paths;
+		TemplatePackageProvider templatePackageProvider;
+		TemplatePackageManager templatePackageManager;
 		bool loaded;
 		List<CustomSolutionTemplate> templates = new List<CustomSolutionTemplate> ();
 
 		void Initialize ()
 		{
 			host = new CustomTemplateEngineHost ();
-			settings = new EngineEnvironmentSettings (host, s => new SettingsLoader (s));
-			paths = new Paths (settings);
-			templateCreator = new TemplateCreator (settings);
 
-			DeleteCache ();
-		}
+			IEnvironment environment = new DefaultEnvironment ();
+			IPathInfo pathInfo = new DefaultPathInfo (environment, host, globalSettingsDir: null, hostSettingsDir: null, hostVersionSettingsDir: null);
+			settings = new EngineEnvironmentSettings (
+				host,
+				virtualizeSettings: false,
+				environment: environment,
+				pathInfo: pathInfo);
 
-		void DeleteCache ()
-		{
-			if (Directory.Exists (paths.User.BaseDir)) {
-				paths.DeleteDirectory (paths.User.BaseDir);
+			var defaultComponents = Microsoft.TemplateEngine.Orchestrator.RunnableProjects.Components.AllComponents
+				.Concat (Microsoft.TemplateEngine.Edge.Components.AllComponents);
+
+			foreach ((Type Type, IIdentifiedComponent Instance) component in defaultComponents) {
+				settings.Components.AddComponent (component.Type, component.Instance);
 			}
+
+			var factory = new TemplatePackageProviderFactory ();
+			templatePackageProvider = (TemplatePackageProvider)factory.CreateProvider (settings);
+			settings.Components.AddComponent (typeof (ITemplatePackageProviderFactory), factory);
+
+			templateCreator = new TemplateCreator (settings);
+			templatePackageManager = new TemplatePackageManager (settings);
 		}
 
 		public void ReloadTemplates ()
 		{
 			if (settings == null)
 				return;
-
-			Initialize ();
 
 			templates.Clear ();
 			loaded = false;
@@ -81,37 +92,36 @@ namespace MonoDevelop.Templating
 			}
 		}
 
-		public void LoadTemplates ()
+		public async Task LoadTemplates ()
 		{
 			if (loaded || !TemplatingServices.Options.TemplateFolders.Any ())
 				return;
 
 			EnsureInitialized ();
 
-			var settingsLoader = (SettingsLoader)settings.SettingsLoader;
+			var scanPaths = new List<string> ();
 
 			foreach (string folder in TemplatingServices.Options.TemplateFolders) {
 				if (Directory.Exists (folder)) {
-					try {
-						settingsLoader.UserTemplateCache.Scan (folder);
-					} catch (Exception ex) {
-						string message = string.Format ("Unable to load templates from folder '{0}.", folder);
-						TemplatingServices.LogError (message, ex);
-					}
+					scanPaths.Add (folder);
 				}
 			}
 
-			// If there are no templates found then do not save the settings. This
-			// avoids a null reference exception in the settingsLoader.Save method.
-			if (!settingsLoader.MountPoints.Any ()) {
-				loaded = true;
-				return;
+			try {
+				templatePackageProvider.UpdatePackages (nupkgs: scanPaths);
+			} catch (Exception ex) {
+				TemplatingServices.LogError ("Could not update scan paths", ex);
 			}
 
-			settingsLoader.Save ();
-			paths.WriteAllText (paths.User.FirstRunCookie, string.Empty);
+			try {
+				await templatePackageManager.RebuildTemplateCacheAsync (CancellationToken.None);
+			} catch (Exception ex) {
+				TemplatingServices.LogError ("Could not rebuild template cache", ex);
+			}
 
-			foreach (TemplateInfo templateInfo in settingsLoader.UserTemplateCache.TemplateInfo) {
+			IReadOnlyList<ITemplateInfo> templateInfos = await templatePackageManager.GetTemplatesAsync (CancellationToken.None);
+
+			foreach (ITemplateInfo templateInfo in templateInfos) {
 				var template = new CustomSolutionTemplate (templateInfo);
 				templates.Add (template);
 			}
@@ -123,7 +133,7 @@ namespace MonoDevelop.Templating
 			get { return templates; }
 		}
 
-		public Task<TemplateCreationResult> Create (
+		public Task<ITemplateCreationResult> Create (
 			CustomSolutionTemplate template,
 			NewProjectConfiguration config,
 			IReadOnlyDictionary<string, string> parameters)
@@ -134,9 +144,9 @@ namespace MonoDevelop.Templating
 				config.GetValidProjectName (),
 				config.ProjectLocation,
 				parameters,
-				true,
-				false,
-				null
+				forceCreation: false,
+				dryRun: false,
+				cancellationToken: CancellationToken.None
 			);
 		}
 	}
