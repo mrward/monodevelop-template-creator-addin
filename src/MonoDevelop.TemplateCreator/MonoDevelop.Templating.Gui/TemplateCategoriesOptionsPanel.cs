@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using AppKit;
 using MonoDevelop.Components;
 using MonoDevelop.Ide.Gui.Dialogs;
 
@@ -48,7 +49,15 @@ namespace MonoDevelop.Templating.Gui
 			viewModel = new TemplateCategoriesOptionsViewModel ();
 			viewModel.Load ();
 			var widget = new TemplateCategoriesOptionsWidget (viewModel);
-			return new XwtControl (widget);
+
+			// Workaround the options panel not displaying by setting
+			// an explicit height constraint.
+			var view = (NSView)widget.Surface.NativeWidget;
+			NSLayoutConstraint heightConstraint = view.HeightAnchor.ConstraintEqualTo (340f);
+			heightConstraint.Priority = (int)NSLayoutPriority.DefaultLow;
+			heightConstraint.Active = true;
+
+			return view;
 		}
 	}
 }
