@@ -74,11 +74,11 @@
 				_label="Custom Categories"
 				fill="true"
 				class="MonoDevelop.Templating.Gui.TemplateCategoriesOptionsPanel" />
-<!--			<Section
+			<Section
 				id="TemplateFolders"
 				_label="Custom Folders"
 				fill="true"
-				class="MonoDevelop.Templating.Gui.TemplateFoldersOptionsPanel" />-->
+				class="MonoDevelop.Templating.Gui.TemplateFoldersOptionsPanel" />
 		</Section>
 	</Extension>
 
