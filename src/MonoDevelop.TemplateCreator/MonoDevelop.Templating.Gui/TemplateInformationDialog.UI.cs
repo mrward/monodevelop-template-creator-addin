@@ -54,6 +54,7 @@ namespace MonoDevelop.Templating.Gui
 
 			var mainVBox = new VBox ();
 			mainVBox.Margin = 15;
+			mainVBox.Spacing = 10;
 			Content = mainVBox;
 
 			var mainLabel = new Label ();
@@ -92,6 +93,7 @@ namespace MonoDevelop.Templating.Gui
 
 			selectCategoryButton = new Button ();
 			selectCategoryButton.Label = "\u2026";
+			selectCategoryButton.HeightRequest = 10;
 			categoryTextEntry.HBox.PackStart (selectCategoryButton);
 
 			shortNameTextEntry = CreateTemplateTextEntry (
@@ -164,16 +166,27 @@ namespace MonoDevelop.Templating.Gui
 		{
 			double width = 0;
 			foreach (Label label in allLabels) {
-				width = Math.Max (width, label.WindowBounds.Width);
+				var widget = label as IWidgetSurface;
+				Size size = widget.GetPreferredSize (includeMargin: true);
+				width = Math.Max (width, size.Width);
 			}
 
 			foreach (Label label in allLabels) {
-				if (label.WindowBounds.Width < width) {
+				if (label.WidthRequest < width) {
 					label.WidthRequest = width;
 				}
 			}
 
 			base.OnBoundsChanged (a);
+		}
+
+		protected override void OnShown ()
+		{
+			base.OnShown ();
+
+			// Set focus to first text box here. Doing this before the dialog
+			// is visible does not work when the UI is using Xamarin.Mac
+			authorTextEntry.TextEntry.SetFocus ();
 		}
 	}
 }

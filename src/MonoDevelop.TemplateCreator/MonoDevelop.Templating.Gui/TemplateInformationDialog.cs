@@ -63,6 +63,24 @@ namespace MonoDevelop.Templating.Gui
 			selectCategoryButton.Clicked += SelectCategoryButtonClicked;
 		}
 
+		protected override void Dispose (bool disposing)
+		{
+			if (disposing) {
+				authorTextEntry.TextEntry.Changed -= AuthorTextEntryChanged;
+				defaultProjectNameTextEntry.TextEntry.Changed -= DefaultProjectNameTextEntryChanged;
+				displayNameTextEntry.TextEntry.Changed -= DisplayNameTextEntryChanged;
+				groupIdentityTextEntry.TextEntry.Changed -= GroupIdentityTextEntryChanged;
+				identityTextEntry.TextEntry.Changed -= IdentityTextEntryChanged;
+				shortNameTextEntry.TextEntry.Changed -= ShortNameTextEntryChanged;
+				categoryTextEntry.TextEntry.Changed -= CategoryTextEntryChanged;
+				descriptionTextEntry.TextEntry.Changed -= DescriptionTextChanged;
+				fileFormatExcludeTextEntry.TextEntry.Changed -= FileFormatExcludeTextChanged;
+
+				selectCategoryButton.Clicked -= SelectCategoryButtonClicked;
+			}
+			base.Dispose (disposing);
+		}
+
 		public bool ShowWithParent ()
 		{
 			return Run (MessageDialog.RootWindow) == Command.Ok;
