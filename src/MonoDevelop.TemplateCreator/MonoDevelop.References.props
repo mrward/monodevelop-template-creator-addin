@@ -3,6 +3,13 @@
     <MDBinDir>\Applications\Visual Studio %28Preview%29.app\Contents\MonoBundle</MDBinDir>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="System.Runtime.InteropServices.NFloat.Internal" Version="6.0.1" />
+   </ItemGroup>
+   <ItemGroup>
+     <Reference Include="Microsoft.macOS">
+       <HintPath>$(MDBinDir)\Microsoft.macOS.dll</HintPath>
+       <Private>False</Private>
+     </Reference>
     <Reference Include="Microsoft.Extensions.Logging.Abstractions">
       <Private>False</Private>
       <HintPath>$(MDBinDir)\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
@@ -26,10 +33,6 @@
     <Reference Include="System.Collections.Immutable">
       <Private>False</Private>
       <HintPath>$(MDBinDir)\System.Collections.Immutable.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Mac">
-      <Private>False</Private>
-      <HintPath>/usr/local/share/dotnet/packs/Microsoft.macOS.Ref/12.1.301-preview.13.7/ref/net6.0/Xamarin.Mac.dll</HintPath>
     </Reference>
     <Reference Include="Xwt">
       <Private>False</Private>
