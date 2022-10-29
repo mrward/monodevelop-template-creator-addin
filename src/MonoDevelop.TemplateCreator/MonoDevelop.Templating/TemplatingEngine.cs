@@ -141,7 +141,7 @@ namespace MonoDevelop.Templating
 			return templateCreator.InstantiateAsync (
 				template.Info,
 				config.ProjectName,
-				config.GetValidProjectName (),
+				config.ProjectName,
 				config.ProjectLocation,
 				parameters,
 				forceCreation: false,
