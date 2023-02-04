@@ -7,7 +7,7 @@
 	url         = "https://github.com/mrward/monodevelop-template-creator-addin"
 	description = "Create project templates for Visual Studio for Mac"
 	category    = "IDE extensions"
-	version     = "0.8">
+	version     = "0.9">
 
 	<Runtime>
 		<Import assembly="MonoDevelop.TemplateCreator.dll" />
@@ -18,8 +18,8 @@
 	</Runtime>
 
 	<Dependencies>
-		<Addin id="::MonoDevelop.Core" version="17.4" />
-		<Addin id="::MonoDevelop.Ide" version="17.4" />
+		<Addin id="::MonoDevelop.Core" version="17.5" />
+		<Addin id="::MonoDevelop.Ide" version="17.5" />
 	</Dependencies>
 
 	<Extension path="/MonoDevelop/Ide/Commands">
